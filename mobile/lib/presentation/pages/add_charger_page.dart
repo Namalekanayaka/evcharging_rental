@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../core/theme/app_theme.dart';
 import '../bloc/charger/charger_bloc.dart';
 
 /// Add/Edit Charger Page
@@ -17,7 +16,6 @@ class AddChargerPage extends StatefulWidget {
 
 class _AddChargerPageState extends State<AddChargerPage> {
   final _formKey = GlobalKey<FormState>();
-  late GoogleMapController _mapController;
 
   // Controllers
   late TextEditingController _nameController;
@@ -36,9 +34,6 @@ class _AddChargerPageState extends State<AddChargerPage> {
   double _longitude = 0;
   bool _isPublic = true;
   bool _allowReservations = true;
-
-  // Availability times
-  final Map<int, Map<String, String>> _availability = {};
 
   final List<String> chargerTypes = ['AC', 'DC', 'FAST'];
 
@@ -113,13 +108,11 @@ class _AddChargerPageState extends State<AddChargerPage> {
           ),
           body: GoogleMap(
             initialCameraPosition: CameraPosition(
-              target: LatLng(_latitude != 0 ? _latitude : 37.7749, 
-                           _longitude != 0 ? _longitude : -122.4194),
+              target: LatLng(_latitude != 0 ? _latitude : 37.7749,
+                  _longitude != 0 ? _longitude : -122.4194),
               zoom: 15,
             ),
-            onMapCreated: (controller) {
-              _mapController = controller;
-            },
+            onMapCreated: (_) {},
             onTap: (LatLng position) {
               Navigator.pop(context, position);
             },
@@ -156,62 +149,45 @@ class _AddChargerPageState extends State<AddChargerPage> {
       return;
     }
 
-    final chargerData = {
-      'name': _nameController.text,
-      'description': _descriptionController.text,
-      'chargerType': _chargerType,
-      'powerKw': double.parse(_powerKwController.text),
-      'address': _addressController.text,
-      'city': _cityController.text,
-      'state': _stateController.text,
-      'postalCode': _postalCodeController.text,
-      'latitude': _latitude,
-      'longitude': _longitude,
-      'pricePerKwh': double.parse(_pricePerKwhController.text),
-      'pricePerHour': double.parse(_pricePerHourController.text),
-      'isPublic': _isPublic,
-      'allowReservations': _allowReservations,
-    };
-
     if (widget.existingCharger != null) {
       context.read<ChargerBloc>().add(
-        UpdateChargerEvent(
-          chargerId: widget.existingCharger!['id'],
-          name: _nameController.text,
-          description: _descriptionController.text,
-          type: _chargerType,
-          address: _addressController.text,
-          city: _cityController.text,
-          state: _stateController.text,
-          postalCode: _postalCodeController.text,
-          latitude: _latitude,
-          longitude: _longitude,
-          pricePerKwh: double.parse(_pricePerKwhController.text),
-          pricePerHour: double.parse(_pricePerHourController.text),
-          powerKw: double.parse(_powerKwController.text),
-          isPublic: _isPublic,
-          allowReservations: _allowReservations,
-        ),
-      );
+            UpdateChargerEvent(
+              chargerId: widget.existingCharger!['id'],
+              name: _nameController.text,
+              description: _descriptionController.text,
+              type: _chargerType,
+              address: _addressController.text,
+              city: _cityController.text,
+              state: _stateController.text,
+              postalCode: _postalCodeController.text,
+              latitude: _latitude,
+              longitude: _longitude,
+              pricePerKwh: double.parse(_pricePerKwhController.text),
+              pricePerHour: double.parse(_pricePerHourController.text),
+              powerKw: double.parse(_powerKwController.text),
+              isPublic: _isPublic,
+              allowReservations: _allowReservations,
+            ),
+          );
     } else {
       context.read<ChargerBloc>().add(
-        CreateChargerEvent(
-          name: _nameController.text,
-          description: _descriptionController.text,
-          type: _chargerType,
-          address: _addressController.text,
-          city: _cityController.text,
-          state: _stateController.text,
-          postalCode: _postalCodeController.text,
-          latitude: _latitude,
-          longitude: _longitude,
-          pricePerKwh: double.parse(_pricePerKwhController.text),
-          pricePerHour: double.parse(_pricePerHourController.text),
-          powerKw: double.parse(_powerKwController.text),
-          isPublic: _isPublic,
-          allowReservations: _allowReservations,
-        ),
-      );
+            CreateChargerEvent(
+              name: _nameController.text,
+              description: _descriptionController.text,
+              type: _chargerType,
+              address: _addressController.text,
+              city: _cityController.text,
+              state: _stateController.text,
+              postalCode: _postalCodeController.text,
+              latitude: _latitude,
+              longitude: _longitude,
+              pricePerKwh: double.parse(_pricePerKwhController.text),
+              pricePerHour: double.parse(_pricePerHourController.text),
+              powerKw: double.parse(_powerKwController.text),
+              isPublic: _isPublic,
+              allowReservations: _allowReservations,
+            ),
+          );
     }
   }
 
@@ -448,7 +424,8 @@ class _AddChargerPageState extends State<AddChargerPage> {
                                 children: [
                                   const Text(
                                     'Coordinates',
-                                    style: TextStyle(fontWeight: FontWeight.w600),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
@@ -539,7 +516,8 @@ class _AddChargerPageState extends State<AddChargerPage> {
                       setState(() => _isPublic = value ?? true);
                     },
                     title: const Text('Make this charger public'),
-                    subtitle: const Text('Allow other users to see and book this charger'),
+                    subtitle: const Text(
+                        'Allow other users to see and book this charger'),
                   ),
 
                   // Reservations toggle
@@ -549,7 +527,8 @@ class _AddChargerPageState extends State<AddChargerPage> {
                       setState(() => _allowReservations = value ?? true);
                     },
                     title: const Text('Allow reservations'),
-                    subtitle: const Text('Users can reserve time slots in advance'),
+                    subtitle:
+                        const Text('Users can reserve time slots in advance'),
                   ),
                   const SizedBox(height: 24),
 
@@ -559,7 +538,8 @@ class _AddChargerPageState extends State<AddChargerPage> {
                       return SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: state is ChargerLoading ? null : _submitForm,
+                          onPressed:
+                              state is ChargerLoading ? null : _submitForm,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),

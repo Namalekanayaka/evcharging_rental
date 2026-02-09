@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import '../bloc/search_bloc.dart';
 import '../../data/entities/search_entities.dart';
@@ -25,7 +24,7 @@ class _SearchPageState extends State<SearchPage> {
   double _maxPrice = 100;
   int _minPower = 0;
   bool _availableOnly = true;
-  List<String> _selectedChargerTypes = [];
+  final List<String> _selectedChargerTypes = [];
 
   @override
   void initState() {
@@ -92,7 +91,8 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 const SizedBox(height: 20),
                 // Price Range
-                Text('Price Range: \$${_minPrice.toStringAsFixed(2)} - \$${_maxPrice.toStringAsFixed(2)}/kWh'),
+                Text(
+                    'Price Range: \$${_minPrice.toStringAsFixed(2)} - \$${_maxPrice.toStringAsFixed(2)}/kWh'),
                 RangeSlider(
                   values: RangeValues(_minPrice, _maxPrice),
                   min: 0,
@@ -119,16 +119,11 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 const SizedBox(height: 20),
                 // Charger Types
-                Text('Charger Types:'),
+                const Text('Charger Types:'),
                 Wrap(
                   spacing: 8,
-                  children: [
-                    'Type 1',
-                    'Type 2',
-                    'CCS',
-                    'Tesla',
-                    'CHAdeMO'
-                  ].map((type) {
+                  children: ['Type 1', 'Type 2', 'CCS', 'Tesla', 'CHAdeMO']
+                      .map((type) {
                     return FilterChip(
                       label: Text(type),
                       selected: _selectedChargerTypes.contains(type),
@@ -155,15 +150,17 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 const SizedBox(height: 20),
                 // Sort By
-                Text('Sort By:'),
+                const Text('Sort By:'),
                 DropdownButton<String>(
                   value: _sortBy,
                   isExpanded: true,
                   items: const [
-                    DropdownMenuItem(value: 'distance', child: Text('Distance')),
+                    DropdownMenuItem(
+                        value: 'distance', child: Text('Distance')),
                     DropdownMenuItem(value: 'price', child: Text('Price')),
                     DropdownMenuItem(value: 'rating', child: Text('Rating')),
-                    DropdownMenuItem(value: 'availability', child: Text('Availability')),
+                    DropdownMenuItem(
+                        value: 'availability', child: Text('Availability')),
                   ],
                   onChanged: (value) {
                     setModalState(() => _sortBy = value ?? 'distance');
@@ -211,7 +208,8 @@ class _SearchPageState extends State<SearchPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 16),
                     ),
                     onSubmitted: (_) => _performSearch(),
                   ),
@@ -394,7 +392,8 @@ class ChargerSearchCard extends StatelessWidget {
                   Flex(
                     direction: Axis.horizontal,
                     children: [
-                      const Icon(Icons.bolt, size: 16, color: Colors.deepOrange),
+                      const Icon(Icons.bolt,
+                          size: 16, color: Colors.deepOrange),
                       const SizedBox(width: 4),
                       Text('${charger.powerOutput}kW'),
                     ],
@@ -404,7 +403,7 @@ class ChargerSearchCard extends StatelessWidget {
                   Flex(
                     direction: Axis.horizontal,
                     children: [
-                      const Icon(Icons.local_gasstation, size: 16, color: Colors.green),
+                      const Icon(Icons.power, size: 16, color: Colors.green),
                       const SizedBox(width: 4),
                       Text('\$${charger.pricePerKwh.toStringAsFixed(2)}/kWh'),
                     ],
@@ -413,7 +412,8 @@ class ChargerSearchCard extends StatelessWidget {
                   // Availability
                   Flexible(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: charger.availablePorts > 0
                             ? Colors.green.withOpacity(0.2)

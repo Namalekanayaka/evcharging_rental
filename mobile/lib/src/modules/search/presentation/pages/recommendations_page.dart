@@ -192,7 +192,7 @@ class RecommendationCard extends StatefulWidget {
 }
 
 class _RecommendationCardState extends State<RecommendationCard> {
-  bool _showDetails = false;
+  // Dynamic flag for showing details
 
   @override
   Widget build(BuildContext context) {
@@ -287,7 +287,7 @@ class _RecommendationCardState extends State<RecommendationCard> {
                   color: Colors.deepOrange,
                 ),
                 _StatCard(
-                  icon: Icons.local_gasstation,
+                  icon: Icons.power,
                   label: 'Price',
                   value:
                       '\$${widget.charger.pricePerKwh.toStringAsFixed(2)}',

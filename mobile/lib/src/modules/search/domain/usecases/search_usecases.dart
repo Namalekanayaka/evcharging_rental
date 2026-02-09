@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import '../entities/search_entities.dart';
-import '../repositories/search_repository.dart';
-import '../../../../core/error/failures.dart';
-import '../../../../core/usecases/usecase.dart';
+import '../../data/entities/search_entities.dart';
+import '../../data/repositories/search_repository.dart';
+import '../../../../../core/error/failures.dart';
+import '../../../../../core/usecases/usecase.dart';
 
 class SearchNearbyChargersUseCase
     implements UseCase<List<ChargerSearchResultEntity>, SearchFilterEntity> {

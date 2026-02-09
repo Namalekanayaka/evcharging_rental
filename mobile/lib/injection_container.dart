@@ -9,6 +9,16 @@ import 'src/modules/search/data/datasources/search_remote_data_source.dart';
 import 'src/modules/search/data/repositories/search_repository.dart';
 import 'src/modules/search/domain/usecases/search_usecases.dart';
 import 'src/modules/search/presentation/bloc/search_bloc.dart';
+import 'src/modules/payment/data/datasources/payment_remote_data_source.dart';
+import 'src/modules/payment/data/repositories/payment_repository.dart';
+import 'src/modules/payment/domain/usecases/payment_usecases.dart';
+import 'src/modules/payment/presentation/bloc/payment_bloc.dart';
+import 'src/modules/pricing/data/datasources/pricing_remote_data_source.dart';
+import 'src/modules/pricing/data/repositories/pricing_repository.dart';
+import 'src/modules/pricing/presentation/bloc/pricing_bloc.dart';
+import 'src/modules/review/data/datasources/review_remote_data_source.dart';
+import 'src/modules/review/data/repositories/review_repository.dart';
+import 'src/modules/review/presentation/bloc/review_bloc.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
 import 'presentation/bloc/charger/charger_bloc.dart';
 import 'presentation/bloc/booking/booking_bloc.dart';
@@ -84,6 +94,47 @@ Future<void> init() async {
     GetTrendingChargersUseCase(repository: getIt<SearchRepository>()),
   );
 
+  // Payment Module
+  getIt.registerSingleton<PaymentRemoteDataSource>(
+    PaymentRemoteDataSourceImpl(
+      dio: getIt<ApiClient>().dio,
+      baseUrl: 'http://localhost:5000/api',
+    ),
+  );
+
+  getIt.registerSingleton<PaymentRepository>(
+    PaymentRepositoryImpl(remoteDataSource: getIt<PaymentRemoteDataSource>()),
+  );
+
+  // Payment Use Cases
+  getIt.registerSingleton<GetWalletUseCase>(
+    GetWalletUseCase(repository: getIt<PaymentRepository>()),
+  );
+
+  getIt.registerSingleton<AddMoneyUseCase>(
+    AddMoneyUseCase(repository: getIt<PaymentRepository>()),
+  );
+
+  getIt.registerSingleton<GetTransactionHistoryUseCase>(
+    GetTransactionHistoryUseCase(repository: getIt<PaymentRepository>()),
+  );
+
+  getIt.registerSingleton<GetPaymentHistoryUseCase>(
+    GetPaymentHistoryUseCase(repository: getIt<PaymentRepository>()),
+  );
+
+  getIt.registerSingleton<ProcessPaymentUseCase>(
+    ProcessPaymentUseCase(repository: getIt<PaymentRepository>()),
+  );
+
+  getIt.registerSingleton<GetPaymentDetailsUseCase>(
+    GetPaymentDetailsUseCase(repository: getIt<PaymentRepository>()),
+  );
+
+  getIt.registerSingleton<RefundPaymentUseCase>(
+    RefundPaymentUseCase(repository: getIt<PaymentRepository>()),
+  );
+
   // BLoCs
   getIt.registerSingleton<AuthBloc>(
     AuthBloc(authRepository: getIt<AuthRepository>()),
@@ -103,4 +154,45 @@ Future<void> init() async {
     ),
   );
   getIt.registerSingleton<BookingBloc>(BookingBloc());
+  getIt.registerSingleton<PaymentBloc>(
+    PaymentBloc(
+      getWalletUseCase: getIt<GetWalletUseCase>(),
+      addMoneyUseCase: getIt<AddMoneyUseCase>(),
+      getTransactionHistoryUseCase: getIt<GetTransactionHistoryUseCase>(),
+      getPaymentHistoryUseCase: getIt<GetPaymentHistoryUseCase>(),
+      processPaymentUseCase: getIt<ProcessPaymentUseCase>(),
+      getPaymentDetailsUseCase: getIt<GetPaymentDetailsUseCase>(),
+      refundPaymentUseCase: getIt<RefundPaymentUseCase>(),
+    ),
+  );
+
+  // Pricing Module
+  getIt.registerSingleton<PricingRemoteDataSource>(
+    PricingRemoteDataSourceImpl(
+      dio: getIt<ApiClient>().dio,
+    ),
+  );
+
+  getIt.registerSingleton<PricingRepository>(
+    PricingRepositoryImpl(remoteDataSource: getIt<PricingRemoteDataSource>()),
+  );
+
+  getIt.registerSingleton<PricingBloc>(
+    PricingBloc(repository: getIt<PricingRepository>()),
+  );
+
+  // Review Module
+  getIt.registerSingleton<ReviewRemoteDataSource>(
+    ReviewRemoteDataSourceImpl(
+      dio: getIt<ApiClient>().dio,
+    ),
+  );
+
+  getIt.registerSingleton<ReviewRepository>(
+    ReviewRepositoryImpl(remoteDataSource: getIt<ReviewRemoteDataSource>()),
+  );
+
+  getIt.registerSingleton<ReviewBloc>(
+    ReviewBloc(repository: getIt<ReviewRepository>()),
+  );
 }

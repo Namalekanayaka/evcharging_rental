@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../datasources/search_remote_data_source.dart';
 import '../entities/search_entities.dart';
-import '../../../../core/error/failures.dart';
+import '../../../../../core/error/failures.dart';
 
 abstract class SearchRepository {
   Future<Either<Failure, List<ChargerSearchResultEntity>>> searchNearbyChargers(

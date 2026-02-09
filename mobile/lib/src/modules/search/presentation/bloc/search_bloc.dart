@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../entities/search_entities.dart';
-import '../usecases/search_usecases.dart';
+import '../../data/entities/search_entities.dart';
+import '../../domain/usecases/search_usecases.dart';
 
 // Events
 abstract class SearchEvent extends Equatable {
@@ -34,7 +34,8 @@ class GetRecommendationEvent extends SearchEvent {
   });
 
   @override
-  List<Object?> get props => [latitude, longitude, batteryPercentage, urgentCharging];
+  List<Object?> get props =>
+      [latitude, longitude, batteryPercentage, urgentCharging];
 }
 
 class SearchByLocationEvent extends SearchEvent {
@@ -298,7 +299,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     result.fold(
       (failure) => emit(SearchErrorState(message: failure.message)),
-      (availability) => emit(AvailabilitySuccessState(availability: availability)),
+      (availability) =>
+          emit(AvailabilitySuccessState(availability: availability)),
     );
   }
 

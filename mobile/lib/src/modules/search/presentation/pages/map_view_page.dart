@@ -58,7 +58,7 @@ class _MapViewPageState extends State<MapViewPage> {
   }
 
   Future<void> _animateToUserLocation() async {
-    if (_userLat != null && _userLng != null && _mapController != null) {
+    if (_userLat != null && _userLng != null) {
       await _mapController.animateCamera(
         CameraUpdate.newLatLngZoom(
           LatLng(_userLat!, _userLng!),

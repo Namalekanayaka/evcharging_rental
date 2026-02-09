@@ -17,12 +17,11 @@ class ChargerListingPage extends StatefulWidget {
 
 class _ChargerListingPageState extends State<ChargerListingPage> {
   final _searchController = TextEditingController();
-  late GoogleMapController _mapController;
-  
+
   String _selectedChargerType = 'ALL';
   String _sortBy = 'DISTANCE';
   bool _showMap = false;
-  
+
   final List<String> chargerTypes = ['ALL', 'AC', 'DC', 'FAST'];
   final List<String> sortOptions = ['DISTANCE', 'RATING', 'PRICE', 'NEWEST'];
 
@@ -42,12 +41,15 @@ class _ChargerListingPageState extends State<ChargerListingPage> {
   /// Filter chargers based on search and filters
   void _applyFilters() {
     context.read<ChargerBloc>().add(
-      SearchChargersEvent(
-        city: _searchController.text.isNotEmpty ? _searchController.text : null,
-        chargerType: _selectedChargerType != 'ALL' ? _selectedChargerType : null,
-        sortBy: _sortBy,
-      ),
-    );
+          SearchChargersEvent(
+            city: _searchController.text.isNotEmpty
+                ? _searchController.text
+                : null,
+            chargerType:
+                _selectedChargerType != 'ALL' ? _selectedChargerType : null,
+            sortBy: _sortBy,
+          ),
+        );
   }
 
   /// Build charger card for list view
@@ -84,19 +86,20 @@ class _ChargerListingPageState extends State<ChargerListingPage> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: charger['status'] == 'ACTIVE'
+                      color: charger.status == 'ACTIVE'
                           ? Colors.green.withOpacity(0.2)
                           : Colors.orange.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      charger['status'] ?? 'OFFLINE',
+                      charger.status,
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: charger['status'] == 'ACTIVE'
+                        color: charger.status == 'ACTIVE'
                             ? Colors.green
                             : Colors.orange,
                       ),
@@ -110,13 +113,14 @@ class _ChargerListingPageState extends State<ChargerListingPage> {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: AppColors.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      charger['chargerType'] ?? 'AC',
+                      charger.type,
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -126,7 +130,7 @@ class _ChargerListingPageState extends State<ChargerListingPage> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '${charger['powerKw'] ?? 0} kW',
+                    '${(charger.maxWattage / 1000).toStringAsFixed(1)} kW',
                     style: const TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
@@ -138,7 +142,7 @@ class _ChargerListingPageState extends State<ChargerListingPage> {
 
               // Location
               Text(
-                charger['city'] ?? 'Unknown',
+                charger.address,
                 style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
@@ -158,16 +162,14 @@ class _ChargerListingPageState extends State<ChargerListingPage> {
                       const Icon(Icons.star, size: 16, color: Colors.amber),
                       const SizedBox(width: 4),
                       Text(
-                        '${charger['avgRating']?.toStringAsFixed(1) ?? 'N/A'} (${charger['totalReviews'] ?? 0})',
+                        '${charger.averageRating?.toStringAsFixed(1) ?? 'N/A'} (${charger.totalReviews ?? 0})',
                         style: const TextStyle(fontSize: 12),
                       ),
                     ],
                   ),
                   // Price
                   Text(
-                    charger['pricePerKwh'] != null
-                        ? '\$${charger['pricePerKwh']?.toStringAsFixed(2)}/kWh'
-                        : 'Contact',
+                    '\$${charger.pricePerHour.toStringAsFixed(2)}/hr',
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -200,7 +202,8 @@ class _ChargerListingPageState extends State<ChargerListingPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
               items: chargerTypes
                   .map((type) => DropdownMenuItem(
@@ -228,7 +231,8 @@ class _ChargerListingPageState extends State<ChargerListingPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               ),
               items: sortOptions
                   .map((sort) => DropdownMenuItem(
@@ -323,9 +327,12 @@ class _ChargerListingPageState extends State<ChargerListingPage> {
                           const SizedBox(height: 8),
                           Text(
                             'Try adjusting your search filters',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Colors.grey,
+                                ),
                           ),
                         ],
                       ),
@@ -342,26 +349,24 @@ class _ChargerListingPageState extends State<ChargerListingPage> {
                         ),
                         zoom: 12,
                       ),
-                      onMapCreated: (controller) {
-                        _mapController = controller;
-                      },
+                      onMapCreated: (_) {},
                       markers: chargers
                           .map(
                             (charger) => Marker(
                               markerId: MarkerId(charger.id.toString()),
                               position: LatLng(
-                                charger['latitude'] ?? 0,
-                                charger['longitude'] ?? 0,
+                                charger.latitude,
+                                charger.longitude,
                               ),
                               infoWindow: InfoWindow(
-                                title: charger['name'],
-                                snippet: charger['city'],
+                                title: charger.name,
+                                snippet: charger.address,
                               ),
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (_) =>
-                                        ChargerDetailPage(chargerId: charger['id']),
+                                    builder: (_) => ChargerDetailPage(
+                                        chargerId: charger.id),
                                   ),
                                 );
                               },
