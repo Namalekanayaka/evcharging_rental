@@ -19,6 +19,12 @@ import 'src/modules/pricing/presentation/bloc/pricing_bloc.dart';
 import 'src/modules/review/data/datasources/review_remote_data_source.dart';
 import 'src/modules/review/data/repositories/review_repository.dart';
 import 'src/modules/review/presentation/bloc/review_bloc.dart';
+import 'src/modules/ai/data/datasources/ai_remote_data_source.dart';
+import 'src/modules/ai/data/repositories/ai_repository.dart';
+import 'src/modules/ai/presentation/bloc/ai_bloc.dart';
+import 'src/modules/admin/data/datasources/admin_remote_data_source.dart';
+import 'src/modules/admin/data/repositories/admin_repository.dart';
+import 'src/modules/admin/presentation/bloc/admin_bloc.dart';
 import 'presentation/bloc/auth/auth_bloc.dart';
 import 'presentation/bloc/charger/charger_bloc.dart';
 import 'presentation/bloc/booking/booking_bloc.dart';
@@ -194,5 +200,35 @@ Future<void> init() async {
 
   getIt.registerSingleton<ReviewBloc>(
     ReviewBloc(repository: getIt<ReviewRepository>()),
+  );
+
+  // AI Module
+  getIt.registerSingleton<AIRemoteDataSource>(
+    AIRemoteDataSourceImpl(
+      dio: getIt<ApiClient>().dio,
+    ),
+  );
+
+  getIt.registerSingleton<AIRepository>(
+    AIRepositoryImpl(remoteDataSource: getIt<AIRemoteDataSource>()),
+  );
+
+  getIt.registerSingleton<AIBloc>(
+    AIBloc(repository: getIt<AIRepository>()),
+  );
+
+  // Admin Module
+  getIt.registerSingleton<AdminRemoteDataSource>(
+    AdminRemoteDataSourceImpl(
+      dio: getIt<ApiClient>().dio,
+    ),
+  );
+
+  getIt.registerSingleton<AdminRepository>(
+    AdminRepositoryImpl(remoteDataSource: getIt<AdminRemoteDataSource>()),
+  );
+
+  getIt.registerSingleton<AdminBloc>(
+    AdminBloc(repository: getIt<AdminRepository>()),
   );
 }

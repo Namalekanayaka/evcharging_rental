@@ -9,6 +9,7 @@ import paymentRoutes from "../modules/payment/paymentRoutes.js";
 import walletRoutes from "../modules/wallet/walletRoutes.js";
 import reviewRoutes from "../modules/review/reviewRoutes.js";
 import pricingRoutes from "../modules/pricing/pricingRoutes.js";
+import aiRoutes from "../modules/ai/aiRoutes.js";
 import adminRoutes from "../modules/admin/adminRoutes.js";
 
 const router = express.Router();
@@ -24,6 +25,7 @@ router.use("/payments", paymentRoutes);
 router.use("/wallet", walletRoutes);
 router.use("/reviews", reviewRoutes);
 router.use("/pricing", pricingRoutes);
+router.use("/ai", aiRoutes);
 router.use("/admin", adminRoutes);
 
 export default router;

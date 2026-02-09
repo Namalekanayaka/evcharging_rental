@@ -9,6 +9,8 @@ import 'src/modules/search/presentation/bloc/search_bloc.dart';
 import 'src/modules/payment/presentation/bloc/payment_bloc.dart';
 import 'src/modules/pricing/presentation/bloc/pricing_bloc.dart';
 import 'src/modules/review/presentation/bloc/review_bloc.dart';
+import 'src/modules/ai/presentation/bloc/ai_bloc.dart';
+import 'src/modules/admin/presentation/bloc/admin_bloc.dart';
 import 'presentation/pages/splash_page.dart';
 import 'injection_container.dart' as di;
 
@@ -32,6 +34,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => GetIt.instance<PaymentBloc>()),
         BlocProvider(create: (_) => GetIt.instance<PricingBloc>()),
         BlocProvider(create: (_) => GetIt.instance<ReviewBloc>()),
+        BlocProvider(create: (_) => GetIt.instance<AIBloc>()),
+        BlocProvider(create: (_) => GetIt.instance<AdminBloc>()),
       ],
       child: MaterialApp(
         title: 'EV Charger Rental',
