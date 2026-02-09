@@ -135,3 +135,100 @@ export const getBookingHistory = asyncHandler(async (req, res, next) => {
     next(new ApiError(500, error.message));
   }
 });
+// New endpoints for enhanced booking features
+
+export const createEmergencyBooking = asyncHandler(async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const { chargerId } = req.body;
+
+    if (!chargerId) {
+      return next(new ApiError(400, "Charger ID is required"));
+    }
+
+    const booking = await bookingService.createEmergencyBooking(userId, chargerId);
+
+    res.status(201).json({
+      success: true,
+      data: booking,
+      message: "Emergency booking created successfully",
+    });
+  } catch (error) {
+    next(new ApiError(400, error.message));
+  }
+});
+
+export const rescheduleBooking = asyncHandler(async (req, res, next) => {
+  try {
+    const bookingId = req.params.id;
+    const { newStartTime, newEndTime } = req.body;
+
+    if (!newStartTime || !newEndTime) {
+      return next(new ApiError(400, "New start and end times are required"));
+    }
+
+    const booking = await bookingService.rescheduleBooking(bookingId, {
+      newStartTime,
+      newEndTime,
+    });
+
+    res.status(200).json({
+      success: true,
+      data: booking,
+      message: "Booking rescheduled successfully",
+    });
+  } catch (error) {
+    next(new ApiError(400, error.message));
+  }
+});
+
+export const checkSlotAvailability = asyncHandler(async (req, res, next) => {
+  try {
+    const { chargerId, startTime, endTime } = req.body;
+
+    if (!chargerId || !startTime || !endTime) {
+      return next(new ApiError(400, "Charger ID and time range are required"));
+    }
+
+    const availability = await bookingService.checkSlotAvailability(
+      chargerId,
+      startTime,
+      endTime,
+    );
+
+    res.status(200).json({
+      success: true,
+      data: availability,
+    });
+  } catch (error) {
+    next(new ApiError(400, error.message));
+  }
+});
+
+export const autoCompleteExpiredBookings = asyncHandler(async (req, res, next) => {
+  try {
+    const result = await bookingService.autoCompleteExpiredBookings();
+
+    res.status(200).json({
+      success: true,
+      data: result,
+      message: "Expired bookings auto-completed",
+    });
+  } catch (error) {
+    next(new ApiError(500, error.message));
+  }
+});
+
+export const autoExpireUnconfirmedBookings = asyncHandler(async (req, res, next) => {
+  try {
+    const result = await bookingService.autoExpireUnconfirmedBookings();
+
+    res.status(200).json({
+      success: true,
+      data: result,
+      message: "Unconfirmed bookings auto-expired",
+    });
+  } catch (error) {
+    next(new ApiError(500, error.message));
+  }
+});

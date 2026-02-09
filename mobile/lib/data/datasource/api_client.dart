@@ -34,6 +34,9 @@ class ApiClient {
     _token = token;
   }
 
+  // Getter for Dio instance
+  Dio get dio => _dio;
+
   // Generic HTTP Methods
   Future<Response> post(
     String endpoint, {

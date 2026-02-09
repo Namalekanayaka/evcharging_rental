@@ -110,10 +110,10 @@ class _WalletPageState extends State<WalletPage> {
             child: const Icon(Icons.local_gas_station, color: Colors.blue),
           ),
           const SizedBox(width: 12),
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text('Charger Booking',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 Text('Downtown Fast Charger',

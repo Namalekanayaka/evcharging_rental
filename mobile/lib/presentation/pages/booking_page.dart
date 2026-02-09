@@ -19,8 +19,8 @@ class _BookingPageState extends State<BookingPage> {
         length: 3,
         child: Column(
           children: [
-            TabBar(
-              tabs: const [
+            const TabBar(
+              tabs: [
                 Tab(text: 'Upcoming'),
                 Tab(text: 'Active'),
                 Tab(text: 'History'),
@@ -90,12 +90,12 @@ class _BookingPageState extends State<BookingPage> {
               style: TextStyle(color: Colors.grey, fontSize: 14),
             ),
             const SizedBox(height: 12),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text('Start Time',
                         style: TextStyle(fontSize: 12, color: Colors.grey)),
                     Text('Dec 25, 2024 - 10:00 AM'),
@@ -103,7 +103,7 @@ class _BookingPageState extends State<BookingPage> {
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text('Duration',
                         style: TextStyle(fontSize: 12, color: Colors.grey)),
                     Text('2 hours'),
@@ -111,7 +111,7 @@ class _BookingPageState extends State<BookingPage> {
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text('Amount',
                         style: TextStyle(fontSize: 12, color: Colors.grey)),
                     Text('\$11.98',

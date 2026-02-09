@@ -157,7 +157,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         type: event.type,
       );
 
-      emit(OTPResent(message: 'OTP resent successfully'));
+      emit(const OTPResent(message: 'OTP resent successfully'));
     } catch (e) {
       emit(AuthFailure(error: e.toString()));
     }
