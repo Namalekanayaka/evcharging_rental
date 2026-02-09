@@ -31,7 +31,7 @@ class _WalletPageState extends State<WalletPage> {
                   gradient: LinearGradient(
                     colors: [
                       Theme.of(context).primaryColor,
-                      Theme.of(context).primaryColor.withOpacity(0.7),
+                      Theme.of(context).primaryColor.withValues(alpha: 0.7),
                     ],
                   ),
                 ),
@@ -106,7 +106,7 @@ class _WalletPageState extends State<WalletPage> {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: Colors.blue.withOpacity(0.1),
+            backgroundColor: Colors.blue.withValues(alpha: 0.1),
             child: const Icon(Icons.local_gas_station, color: Colors.blue),
           ),
           const SizedBox(width: 12),

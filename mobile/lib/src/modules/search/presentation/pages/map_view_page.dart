@@ -30,6 +30,7 @@ class _MapViewPageState extends State<MapViewPage> {
       final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
+      if (!mounted) return;
       setState(() {
         _userLat = position.latitude;
         _userLng = position.longitude;
@@ -37,6 +38,7 @@ class _MapViewPageState extends State<MapViewPage> {
       _loadChargersNearby();
       _animateToUserLocation();
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error getting location: $e')),
       );
@@ -125,8 +127,8 @@ class _MapViewPageState extends State<MapViewPage> {
           circleId: const CircleId('search-radius'),
           center: LatLng(_userLat!, _userLng!),
           radius: 15000, // 15 km in meters
-          fillColor: Colors.blue.withOpacity(0.1),
-          strokeColor: Colors.blue.withOpacity(0.3),
+          fillColor: Colors.blue.withValues(alpha: 0.1),
+          strokeColor: Colors.blue.withValues(alpha: 0.3),
           strokeWidth: 2,
         ),
       };

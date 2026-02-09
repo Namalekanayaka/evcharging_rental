@@ -156,7 +156,7 @@ class _PricingPackagesPageState extends State<PricingPackagesPage> {
               children: package.features.map((feature) {
                 return Chip(
                   label: Text(feature, style: const TextStyle(fontSize: 12)),
-                  backgroundColor: Colors.blue.withOpacity(0.1),
+                  backgroundColor: Colors.blue.withValues(alpha: 0.1),
                 );
               }).toList(),
             ),

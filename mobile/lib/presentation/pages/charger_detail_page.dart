@@ -89,8 +89,8 @@ class _ChargerDetailPageState extends State<ChargerDetailPage> {
                               ),
                               decoration: BoxDecoration(
                                 color: charger.status == 'ACTIVE'
-                                    ? Colors.green.withOpacity(0.2)
-                                    : Colors.orange.withOpacity(0.2),
+                                    ? Colors.green.withValues(alpha: 0.2)
+                                    : Colors.orange.withValues(alpha: 0.2),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
