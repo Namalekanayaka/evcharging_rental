@@ -42,18 +42,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthAuthenticated(
           user: UserEntity(
             id: int.parse(authData['userId'] ?? '0'),
-            email: '',
-            phone: '',
-            firstName: '',
-            lastName: '',
-            userType: '',
+            email: authData['email'] ?? '',
+            phone: authData['phone'] ?? '',
+            firstName: authData['firstName'] ?? '',
+            lastName: authData['lastName'] ?? '',
+            userType: authData['userType'] ?? 'user',
+            isVerified: authData['isVerified'] as bool? ?? false,
+            createdAt: authData['createdAt'] != null 
+              ? DateTime.parse(authData['createdAt'] as String) 
+              : DateTime.now(),
           ),
         ));
       } else {
         emit(const AuthUnauthenticated());
       }
     } catch (e) {
-      emit(AuthUnauthenticated());
+      emit(const AuthUnauthenticated());
     }
   }
 

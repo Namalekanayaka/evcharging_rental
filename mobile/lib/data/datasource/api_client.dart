@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'core/constants/api_constants.dart';
+import '../../core/constants/api_constants.dart';
 
 class ApiClient {
   late final Dio _dio;
@@ -32,6 +32,53 @@ class ApiClient {
 
   void setToken(String token) {
     _token = token;
+  }
+
+  // Generic HTTP Methods
+  Future<Response> post(
+    String endpoint, {
+    required Map<String, dynamic> data,
+    Map<String, dynamic>? queryParameters,
+  }) {
+    return _dio.post(
+      endpoint,
+      data: data,
+      queryParameters: queryParameters,
+    );
+  }
+
+  Future<Response> get(
+    String endpoint, {
+    Map<String, dynamic>? queryParameters,
+  }) {
+    return _dio.get(
+      endpoint,
+      queryParameters: queryParameters,
+    );
+  }
+
+  Future<Response> delete(
+    String endpoint, {
+    Map<String, dynamic>? data,
+  }) {
+    return _dio.delete(
+      endpoint,
+      data: data,
+    );
+  }
+
+  Future<Response> put(
+    String endpoint, {
+    required Map<String, dynamic> data,
+  }) {
+    return _dio.put(endpoint, data: data);
+  }
+
+  Future<Response> patch(
+    String endpoint, {
+    required Map<String, dynamic> data,
+  }) {
+    return _dio.patch(endpoint, data: data);
   }
 
   // Auth APIs

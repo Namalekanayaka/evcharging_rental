@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/gestures.dart';
 import '../../core/theme/app_theme.dart';
 import '../bloc/auth/auth_bloc.dart';
 import '../bloc/auth/auth_event.dart';
@@ -27,14 +28,11 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
   late List<TextEditingController> _otpControllers;
   late FocusNode _focusNode;
   int _remainingSeconds = 300; // 5 minutes
-  late DateTime _expiryTime;
-
   @override
   void initState() {
     super.initState();
     _otpControllers = List.generate(6, (_) => TextEditingController());
     _focusNode = FocusNode();
-    _expiryTime = DateTime.now().add(const Duration(minutes: 5));
     _startTimer();
   }
 

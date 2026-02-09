@@ -26,12 +26,12 @@ export const comparePassword = async (password, hashedPassword) => {
   return bcrypt.default.compare(password, hashedPassword);
 };
 
-export const generateToken = (payload, secret, expiresIn = '7d') => {
+export const generateToken = async (payload, secret, expiresIn = '7d') => {
   const jwt = await import('jsonwebtoken');
   return jwt.default.sign(payload, secret, { expiresIn });
 };
 
-export const verifyToken = (token, secret) => {
+export const verifyToken = async (token, secret) => {
   const jwt = await import('jsonwebtoken');
   return jwt.default.verify(token, secret);
 };

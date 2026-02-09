@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import '../../domain/entities/user_entity.dart';
-import '../datasources/api_client.dart';
+import '../datasource/api_client.dart';
 import '../datasources/secure_token_storage.dart';
 
 /// Authentication Repository
@@ -59,7 +59,7 @@ class AuthRepository {
         },
       );
 
-      return response['data'];
+      return response.data['data'];
     } catch (e) {
       rethrow;
     }
@@ -79,7 +79,7 @@ class AuthRepository {
         },
       );
 
-      final data = response['data'];
+      final data = response.data['data'];
       return UserEntity.fromJson(data['user']);
     } catch (e) {
       rethrow;
@@ -100,7 +100,7 @@ class AuthRepository {
         },
       );
 
-      final data = response['data'];
+      final data = response.data['data'];
       return UserEntity.fromJson(data['user']);
     } catch (e) {
       rethrow;
@@ -124,7 +124,7 @@ class AuthRepository {
         },
       );
 
-      final data = response['data'];
+      final data = response.data['data'];
       final tokens = data['tokens'];
       final session = data['session'];
 
@@ -159,7 +159,7 @@ class AuthRepository {
         },
       );
 
-      return response['data'];
+      return response.data['data'];
     } catch (e) {
       rethrow;
     }
@@ -178,10 +178,9 @@ class AuthRepository {
       final response = await _apiClient.post(
         '/auth/refresh-token',
         data: {'userId': userId, 'refreshToken': refreshToken},
-        skipAuth: true, // Don't use the expired token
       );
 
-      final newAccessToken = response['data']['accessToken'];
+      final newAccessToken = response.data['data']['accessToken'];
       await _tokenStorage.saveAccessToken(newAccessToken);
 
       return newAccessToken;
@@ -239,7 +238,6 @@ class AuthRepository {
       await _apiClient.post(
         '/auth/request-password-reset',
         data: {'email': email},
-        skipAuth: true,
       );
     } catch (e) {
       rethrow;
@@ -262,7 +260,6 @@ class AuthRepository {
           'newPassword': newPassword,
           'confirmPassword': confirmPassword,
         },
-        skipAuth: true,
       );
     } catch (e) {
       rethrow;
@@ -303,7 +300,7 @@ class AuthRepository {
   Future<List<Map<String, dynamic>>> getUserSessions() async {
     try {
       final response = await _apiClient.get('/auth/sessions');
-      final sessions = (response['data'] as List)
+      final sessions = (response.data['data'] as List)
           .map((session) => session as Map<String, dynamic>)
           .toList();
       return sessions;

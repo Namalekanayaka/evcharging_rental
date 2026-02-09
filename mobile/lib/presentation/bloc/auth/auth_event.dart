@@ -107,16 +107,6 @@ class RefreshTokenEvent extends AuthEvent {
   const RefreshTokenEvent();
 }
 
-/// User logout
-class LogoutEvent extends AuthEvent {
-  final bool allDevices;
-
-  const LogoutEvent({this.allDevices = false});
-
-  @override
-  List<Object> get props => [allDevices];
-}
-
 /// Change password
 class ChangePasswordEvent extends AuthEvent {
   final String currentPassword;
@@ -200,6 +190,12 @@ class TerminateSessionEvent extends AuthEvent {
   List<Object> get props => [sessionId];
 }
 
+/// User logout
 class LogoutEvent extends AuthEvent {
-  const LogoutEvent();
+  final bool allDevices;
+
+  const LogoutEvent({this.allDevices = false});
+
+  @override
+  List<Object> get props => [allDevices];
 }

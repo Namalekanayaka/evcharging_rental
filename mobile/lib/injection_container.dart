@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'data/datasource/api_client.dart';
 import 'data/datasources/secure_token_storage.dart';
@@ -11,22 +12,25 @@ final getIt = GetIt.instance;
 
 Future<void> init() async {
   // Secure Storage
-  const secureStorage = FlutterSecureStorage();
+  final secureStorage = const FlutterSecureStorage();
   getIt.registerSingleton<SecureTokenStorage>(
     SecureTokenStorage(secureStorage: secureStorage),
   );
 
   // API Client
-  final apiClient = ApiClient(
-    tokenStorage: getIt<SecureTokenStorage>(),
-  );
+  final apiClient = ApiClient();
   getIt.registerSingleton<ApiClient>(apiClient);
+
+  // Device Info
+  final deviceInfo = DeviceInfoPlugin();
+  getIt.registerSingleton<DeviceInfoPlugin>(deviceInfo);
 
   // Repositories
   getIt.registerSingleton<AuthRepository>(
     AuthRepository(
       apiClient: getIt<ApiClient>(),
       tokenStorage: getIt<SecureTokenStorage>(),
+      deviceInfo: getIt<DeviceInfoPlugin>(),
     ),
   );
 

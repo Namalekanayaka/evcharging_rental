@@ -4,7 +4,7 @@ abstract class BookingEvent extends Equatable {
   const BookingEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class CreateBookingEvent extends BookingEvent {
