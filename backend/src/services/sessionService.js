@@ -22,7 +22,7 @@ export class SessionService {
       // Invalidate old sessions if more than 3 active sessions
       const activeSessions = await db.query(
         "SELECT id FROM user_sessions WHERE user_id = $1 AND expires_at > NOW() ORDER BY created_at DESC",
-        [userId]
+        [userId],
       );
 
       if (activeSessions.length >= 3) {
@@ -36,7 +36,7 @@ export class SessionService {
         `INSERT INTO user_sessions (user_id, session_id, device_info, ip_address, user_agent, expires_at)
          VALUES ($1, $2, $3, $4, $5, $6)
          RETURNING id, session_id, user_id, device_info, created_at, expires_at`,
-        [userId, sessionId, deviceInfo, ipAddress, userAgent, expiresAt]
+        [userId, sessionId, deviceInfo, ipAddress, userAgent, expiresAt],
       );
 
       return session;
@@ -56,7 +56,7 @@ export class SessionService {
       const session = await db.oneOrNone(
         `SELECT * FROM user_sessions 
          WHERE session_id = $1 AND user_id = $2 AND expires_at > NOW() AND is_active = true`,
-        [sessionId, userId]
+        [sessionId, userId],
       );
 
       if (!session) {
@@ -66,7 +66,7 @@ export class SessionService {
       // Update last accessed time
       await db.query(
         "UPDATE user_sessions SET last_accessed_at = NOW() WHERE id = $1",
-        [session.id]
+        [session.id],
       );
 
       return session;
@@ -86,12 +86,12 @@ export class SessionService {
         // sessionId is actually userId in this case
         await db.query(
           "UPDATE user_sessions SET is_active = false WHERE user_id = $1",
-          [sessionId]
+          [sessionId],
         );
       } else {
         await db.query(
           "UPDATE user_sessions SET is_active = false WHERE id = $1",
-          [sessionId]
+          [sessionId],
         );
       }
     } catch (error) {
@@ -111,7 +111,7 @@ export class SessionService {
          FROM user_sessions 
          WHERE user_id = $1 AND is_active = true AND expires_at > NOW()
          ORDER BY last_accessed_at DESC`,
-        [userId]
+        [userId],
       );
 
       return sessions;
@@ -130,18 +130,18 @@ export class SessionService {
       const key = `failed_login:${email}:${ipAddress}`;
       const attempts = await db.oneOrNone(
         "SELECT attempts, last_attempt FROM login_attempts WHERE email = $1 AND ip_address = $2",
-        [email, ipAddress]
+        [email, ipAddress],
       );
 
       if (!attempts) {
         await db.query(
           "INSERT INTO login_attempts (email, ip_address, attempts, last_attempt) VALUES ($1, $2, 1, NOW())",
-          [email, ipAddress]
+          [email, ipAddress],
         );
       } else {
         await db.query(
           "UPDATE login_attempts SET attempts = attempts + 1, last_attempt = NOW() WHERE email = $1 AND ip_address = $2",
-          [email, ipAddress]
+          [email, ipAddress],
         );
       }
     } catch (error) {
@@ -171,14 +171,15 @@ export class SessionService {
     try {
       const attempts = await db.oneOrNone(
         "SELECT attempts, last_attempt FROM login_attempts WHERE email = $1 AND ip_address = $2",
-        [email, ipAddress]
+        [email, ipAddress],
       );
 
       if (!attempts) return false;
 
       // Lock account for 30 minutes after 5 failed attempts
       const lockoutDuration = 30 * 60 * 1000;
-      const timeSinceLastAttempt = Date.now() - new Date(attempts.last_attempt).getTime();
+      const timeSinceLastAttempt =
+        Date.now() - new Date(attempts.last_attempt).getTime();
 
       if (attempts.attempts >= 5 && timeSinceLastAttempt < lockoutDuration) {
         return true;

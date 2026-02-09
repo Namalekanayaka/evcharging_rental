@@ -15,7 +15,11 @@ import {
   getSessions,
   terminateSession,
 } from "./authController.js";
-import { authMiddleware, optionalAuth, updateSessionActivity } from "../../middleware/authMiddleware.js";
+import {
+  authMiddleware,
+  optionalAuth,
+  updateSessionActivity,
+} from "../../middleware/authMiddleware.js";
 import {
   loginRateLimit,
   otpRateLimit,
@@ -42,7 +46,11 @@ router.post("/login", loginRateLimit, login);
 router.post("/resend-otp", otpRateLimit, resendOTP);
 
 // Password reset flow
-router.post("/request-password-reset", passwordResetRateLimit, requestPasswordReset);
+router.post(
+  "/request-password-reset",
+  passwordResetRateLimit,
+  requestPasswordReset,
+);
 router.post("/reset-password", passwordResetRateLimit, resetPassword);
 
 /**
@@ -70,4 +78,3 @@ router.get("/sessions", getSessions);
 router.delete("/sessions/:sessionId", terminateSession);
 
 export default router;
-

@@ -29,15 +29,17 @@ export function rateLimit(maxRequests = 100, windowMs = 15 * 60 * 1000) {
     const requests = rateLimitStore.get(key) || [];
 
     // Remove old requests outside the window
-    const validRequests = requests.filter((timestamp) => now - timestamp < windowMs);
+    const validRequests = requests.filter(
+      (timestamp) => now - timestamp < windowMs,
+    );
 
     if (validRequests.length >= maxRequests) {
       const nextAvailable = new Date(validRequests[0] + windowMs);
       return next(
         new ApiError(
           429,
-          `Too many requests. Please try again after ${nextAvailable.toLocaleTimeString()}`
-        )
+          `Too many requests. Please try again after ${nextAvailable.toLocaleTimeString()}`,
+        ),
       );
     }
 
@@ -66,24 +68,27 @@ export function loginRateLimit(req, res, next) {
   const maxAttempts = 5;
 
   const requests = rateLimitStore.get(key) || [];
-  const validRequests = requests.filter((timestamp) => now - timestamp < windowMs);
+  const validRequests = requests.filter(
+    (timestamp) => now - timestamp < windowMs,
+  );
 
   if (validRequests.length >= maxAttempts) {
-    const lockoutTime = Math.ceil(
-      (validRequests[0] + windowMs - now) / 60000
-    );
+    const lockoutTime = Math.ceil((validRequests[0] + windowMs - now) / 60000);
     return next(
       new ApiError(
         429,
-        `Too many login attempts. Try again in ${lockoutTime} minutes.`
-      )
+        `Too many login attempts. Try again in ${lockoutTime} minutes.`,
+      ),
     );
   }
 
   validRequests.push(now);
   rateLimitStore.set(key, validRequests);
 
-  res.setHeader("X-Login-Attempts-Remaining", maxAttempts - validRequests.length);
+  res.setHeader(
+    "X-Login-Attempts-Remaining",
+    maxAttempts - validRequests.length,
+  );
 
   next();
 }
@@ -101,17 +106,17 @@ export function otpRateLimit(req, res, next) {
   const maxAttempts = 3;
 
   const requests = rateLimitStore.get(key) || [];
-  const validRequests = requests.filter((timestamp) => now - timestamp < windowMs);
+  const validRequests = requests.filter(
+    (timestamp) => now - timestamp < windowMs,
+  );
 
   if (validRequests.length >= maxAttempts) {
-    const retryTime = Math.ceil(
-      (validRequests[0] + windowMs - now) / 60000
-    );
+    const retryTime = Math.ceil((validRequests[0] + windowMs - now) / 60000);
     return next(
       new ApiError(
         429,
-        `Too many OTP requests. Try again in ${retryTime} minutes.`
-      )
+        `Too many OTP requests. Try again in ${retryTime} minutes.`,
+      ),
     );
   }
 
@@ -136,17 +141,17 @@ export function passwordResetRateLimit(req, res, next) {
   const maxAttempts = 3;
 
   const requests = rateLimitStore.get(key) || [];
-  const validRequests = requests.filter((timestamp) => now - timestamp < windowMs);
+  const validRequests = requests.filter(
+    (timestamp) => now - timestamp < windowMs,
+  );
 
   if (validRequests.length >= maxAttempts) {
-    const retryTime = Math.ceil(
-      (validRequests[0] + windowMs - now) / 60000
-    );
+    const retryTime = Math.ceil((validRequests[0] + windowMs - now) / 60000);
     return next(
       new ApiError(
         429,
-        `Too many password reset requests. Try again in ${retryTime} minutes.`
-      )
+        `Too many password reset requests. Try again in ${retryTime} minutes.`,
+      ),
     );
   }
 
@@ -161,7 +166,9 @@ export function passwordResetRateLimit(req, res, next) {
  * Different limits for different user types
  */
 export function apiRateLimit(req, res, next) {
-  const identifier = req.user ? req.user.id : (req.ip || req.connection.remoteAddress);
+  const identifier = req.user
+    ? req.user.id
+    : req.ip || req.connection.remoteAddress;
   const key = createKey(`${identifier}`, "api");
 
   const now = Date.now();
@@ -176,11 +183,13 @@ export function apiRateLimit(req, res, next) {
   }
 
   const requests = rateLimitStore.get(key) || [];
-  const validRequests = requests.filter((timestamp) => now - timestamp < windowMs);
+  const validRequests = requests.filter(
+    (timestamp) => now - timestamp < windowMs,
+  );
 
   if (validRequests.length >= maxRequests) {
     return next(
-      new ApiError(429, "API rate limit exceeded. Please try again later.")
+      new ApiError(429, "API rate limit exceeded. Please try again later."),
     );
   }
 
@@ -202,7 +211,7 @@ export function cleanupRateLimits() {
 
   for (const [key, timestamps] of rateLimitStore.entries()) {
     const validTimestamps = timestamps.filter(
-      (timestamp) => now - timestamp < maxWindowMs
+      (timestamp) => now - timestamp < maxWindowMs,
     );
 
     if (validTimestamps.length === 0) {

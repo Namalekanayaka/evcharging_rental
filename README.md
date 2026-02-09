@@ -5,6 +5,7 @@ A complete peer-to-peer EV charger rental platform (like Airbnb for EV charging)
 ## 🚀 Features
 
 ### Core Features
+
 - ✅ User authentication with JWT & OTP verification
 - ✅ Charger listing and management
 - ✅ Booking system with real-time availability
@@ -16,6 +17,7 @@ A complete peer-to-peer EV charger rental platform (like Airbnb for EV charging)
 - ✅ Push notifications (Firebase ready)
 
 ### User Types
+
 1. **Drivers** - Search and book chargers
 2. **Charger Owners** - List and manage chargers
 3. **Admins** - Manage platform and users
@@ -26,15 +28,15 @@ A complete peer-to-peer EV charger rental platform (like Airbnb for EV charging)
 
 ### Technology Stack
 
-| Component | Technology |
-|-----------|-----------|
-| **Backend** | Node.js 18+ + Express.js 4.18+ |
-| **Mobile** | Flutter 3.10+ |
-| **Database** | PostgreSQL 12+ |
-| **Auth** | JWT + OTP |
-| **Maps** | Google Maps API |
-| **Notifications** | Firebase Cloud Messaging |
-| **Deployment** | Docker + Docker Compose |
+| Component         | Technology                     |
+| ----------------- | ------------------------------ |
+| **Backend**       | Node.js 18+ + Express.js 4.18+ |
+| **Mobile**        | Flutter 3.10+                  |
+| **Database**      | PostgreSQL 12+                 |
+| **Auth**          | JWT + OTP                      |
+| **Maps**          | Google Maps API                |
+| **Notifications** | Firebase Cloud Messaging       |
+| **Deployment**    | Docker + Docker Compose        |
 
 ### Project Structure
 
@@ -89,6 +91,7 @@ ev-charging-rental/
 ## 📋 Quick Start
 
 ### Prerequisites
+
 - **Node.js** 18.0+ with npm
 - **PostgreSQL** 12+
 - **Flutter** 3.10+
@@ -165,6 +168,7 @@ docker-compose down
 ## 📱 API Endpoints
 
 ### Authentication
+
 ```
 POST   /api/auth/register          - User registration
 POST   /api/auth/verify-otp        - Verify email OTP
@@ -174,6 +178,7 @@ POST   /api/auth/refresh-token     - Refresh JWT
 ```
 
 ### Users
+
 ```
 GET    /api/users/profile          - Get user profile
 PUT    /api/users/profile          - Update profile
@@ -183,6 +188,7 @@ PUT    /api/users/change-password  - Change password
 ```
 
 ### Chargers
+
 ```
 GET    /api/chargers/search        - Search chargers (location, price)
 GET    /api/chargers/:id           - Get charger details
@@ -193,6 +199,7 @@ GET    /api/chargers/:id/availability - Check availability
 ```
 
 ### Bookings
+
 ```
 POST   /api/bookings               - Create booking
 GET    /api/bookings               - Get user bookings
@@ -203,6 +210,7 @@ GET    /api/bookings/history       - Get completed bookings
 ```
 
 ### Wallet & Payments
+
 ```
 GET    /api/wallet                 - Get wallet balance
 POST   /api/wallet/add-balance     - Add money to wallet
@@ -214,6 +222,7 @@ POST   /api/payments/:id/refund    - Refund payment
 ```
 
 ### Reviews
+
 ```
 POST   /api/reviews                - Create review
 GET    /api/reviews/charger/:id    - Get charger reviews
@@ -223,6 +232,7 @@ DELETE /api/reviews/:id            - Delete review
 ```
 
 ### Pricing
+
 ```
 GET    /api/pricing                - Get pricing packages
 POST   /api/pricing/calculate      - Calculate booking price
@@ -230,6 +240,7 @@ GET    /api/pricing/admin/stats    - Get pricing statistics (admin)
 ```
 
 ### Admin
+
 ```
 GET    /api/admin/dashboard/stats  - Dashboard statistics
 GET    /api/admin/users            - List all users
@@ -247,24 +258,31 @@ GET    /api/admin/revenue/timeline - Revenue analytics
 ### Key Tables
 
 **users** - All platform users
+
 - id, email, phone, password, first_name, last_name, user_type, is_verified, average_rating
 
 **chargers** - EV charging stations
+
 - id, owner_id, name, address, latitude, longitude, price_per_hour, connector_types, status
 
 **bookings** - Charging sessions
+
 - id, user_id, charger_id, start_time, end_time, duration, total_amount, status
 
 **wallets** - User wallet balances
+
 - id, user_id, balance
 
 **payments** - Payment records
+
 - id, user_id, booking_id, amount, payment_method, status
 
 **reviews** - User reviews of chargers
+
 - id, user_id, charger_id, rating, comment
 
 **otp_codes** - OTP verification codes
+
 - id, user_id, code, expires_at, is_used
 
 See `COMPLETE_DOCUMENTATION.md` for full schema details and ER diagram.
@@ -311,6 +329,7 @@ FIREBASE_CLIENT_EMAIL=your_client_email
 ## 🧪 Testing
 
 ### Backend Tests
+
 ```bash
 npm run test              # Run all tests
 npm run test:watch       # Watch mode
@@ -318,6 +337,7 @@ npm run lint             # Run linter
 ```
 
 ### Mobile Tests
+
 ```bash
 flutter test             # Run unit tests
 flutter test --coverage  # With coverage report
@@ -328,6 +348,7 @@ flutter test --coverage  # With coverage report
 ## 📦 Building for Production
 
 ### Backend
+
 ```bash
 # Create optimized Docker image
 docker build -t evcharging-backend:latest .
@@ -339,12 +360,14 @@ docker push your-registry/evcharging-backend:latest
 ### Mobile
 
 **iOS:**
+
 ```bash
 flutter build ios --release
 # Upload to TestFlight/App Store via Xcode
 ```
 
 **Android:**
+
 ```bash
 flutter build appbundle --release
 # Upload APK to Google Play Store
@@ -355,6 +378,7 @@ flutter build appbundle --release
 ## 🚀 Deployment
 
 ### AWS Deployment
+
 1. Set up RDS PostgreSQL instance
 2. Deploy Docker container to ECS/EC2
 3. Configure CloudFront CDN
@@ -362,6 +386,7 @@ flutter build appbundle --release
 5. Configure RDS backups
 
 ### Production Checklist
+
 - [ ] All environment variables set
 - [ ] Database backups configured
 - [ ] SSL certificates installed
@@ -376,11 +401,13 @@ flutter build appbundle --release
 ## 📊 Architecture Highlights
 
 ### Clean Architecture (Mobile)
+
 - **Domain Layer** - Business logic & entities
 - **Data Layer** - Repositories & data sources
 - **Presentation Layer** - UI & state management (BLoC)
 
 ### Modular MVC (Backend)
+
 - **Controllers** - Handle HTTP requests
 - **Services** - Business logic
 - **Models** - Database schemas
@@ -388,6 +415,7 @@ flutter build appbundle --release
 - **Middleware** - Authentication, validation, error handling
 
 ### Database Features
+
 - PostgreSQL with proper indexing
 - Migration system for schema changes
 - Seed data for testing
@@ -398,12 +426,14 @@ flutter build appbundle --release
 ## 🎯 Development Roadmap
 
 ### Phase 1 ✅ (Current)
+
 - Core authentication & user management
 - Charger listing & search
 - Booking system
 - Wallet & payment integration
 
 ### Phase 2 (Planned)
+
 - Advanced search filters
 - Real-time notifications
 - Message system between users
@@ -411,6 +441,7 @@ flutter build appbundle --release
 - Analytics dashboard
 
 ### Phase 3 (Future)
+
 - AI-based charger recommendations
 - Dynamic pricing algorithm
 - Integration with actual payment gateways
@@ -446,12 +477,14 @@ flutter build appbundle --release
 ### Backend Issues
 
 **Port 5000 already in use:**
+
 ```bash
 lsof -i :5000
 kill -9 <PID>
 ```
 
 **Database connection error:**
+
 ```bash
 # Check PostgreSQL is running
 sudo service postgresql status
@@ -464,6 +497,7 @@ createdb evcharging_rental_db
 ### Mobile Issues
 
 **Flutter build fails:**
+
 ```bash
 flutter clean
 flutter pub get
@@ -471,6 +505,7 @@ flutter run
 ```
 
 **API connection error:**
+
 - Check backend is running on http://localhost:5000
 - Update apiBaseUrl in `lib/core/constants/api_constants.dart`
 - Check network connectivity
@@ -510,4 +545,4 @@ For support, email support@evcharging.com or create an issue on GitHub.
 
 **Made with ❤️ by the EV Charging Platform Team**
 
-*Last Updated: December 2024*
+_Last Updated: December 2024_

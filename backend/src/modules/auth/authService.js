@@ -31,7 +31,7 @@ export class AuthService {
 
     const isValid = Object.values(requirements).every(Boolean);
     const failedRequirements = Object.keys(requirements).filter(
-      (key) => !requirements[key]
+      (key) => !requirements[key],
     );
 
     return {
@@ -54,7 +54,7 @@ export class AuthService {
       // Check if user exists
       const existingUser = await db.oneOrNone(
         "SELECT id, email, phone FROM users WHERE email = $1 OR phone = $2",
-        [email, phone]
+        [email, phone],
       );
 
       if (existingUser) {
@@ -66,7 +66,7 @@ export class AuthService {
       const passwordValidation = this.validatePasswordStrength(password);
       if (!passwordValidation.isValid) {
         throw new Error(
-          `Weak password. Requirements: ${passwordValidation.failedRequirements.join(", ")}`
+          `Weak password. Requirements: ${passwordValidation.failedRequirements.join(", ")}`,
         );
       }
 
@@ -79,7 +79,7 @@ export class AuthService {
          is_verified, account_status, created_at)
          VALUES ($1, $2, $3, $4, $5, $6, false, 'pending_verification', NOW())
          RETURNING id, email, phone, first_name, last_name, user_type, created_at`,
-        [email, phone, hashedPassword, firstName, lastName, userType]
+        [email, phone, hashedPassword, firstName, lastName, userType],
       );
 
       // Generate and send email OTP
@@ -115,7 +115,7 @@ export class AuthService {
         `UPDATE users SET is_verified = true, verified_at = NOW(), account_status = 'active'
          WHERE id = $1
          RETURNING id, email, phone, first_name, last_name, user_type, average_rating`,
-        [userId]
+        [userId],
       );
 
       return {
@@ -144,7 +144,7 @@ export class AuthService {
         `UPDATE users SET phone_verified = true, phone_verified_at = NOW()
          WHERE id = $1
          RETURNING id, email, phone, first_name, last_name, user_type`,
-        [userId]
+        [userId],
       );
 
       return {
@@ -170,7 +170,7 @@ export class AuthService {
       const isLocked = await sessionService.isAccountLocked(email, ipAddress);
       if (isLocked) {
         throw new Error(
-          "Account temporarily locked due to multiple failed login attempts. Try again later."
+          "Account temporarily locked due to multiple failed login attempts. Try again later.",
         );
       }
 
@@ -187,7 +187,7 @@ export class AuthService {
       // Check account status
       if (user.account_status === "suspended") {
         throw new Error(
-          "Account suspended. Contact support for more information."
+          "Account suspended. Contact support for more information.",
         );
       }
 
@@ -215,7 +215,7 @@ export class AuthService {
         user.id,
         deviceInfo,
         ipAddress,
-        userAgent
+        userAgent,
       );
 
       // Generate tokens
@@ -227,7 +227,7 @@ export class AuthService {
           sessionId: session.session_id,
         },
         jwtConfig.secret,
-        { expiresIn: jwtConfig.expiresIn }
+        { expiresIn: jwtConfig.expiresIn },
       );
 
       const refreshToken = jwt.sign(
@@ -236,14 +236,14 @@ export class AuthService {
           sessionId: session.session_id,
         },
         jwtConfig.refreshSecret,
-        { expiresIn: jwtConfig.refreshExpiresIn }
+        { expiresIn: jwtConfig.refreshExpiresIn },
       );
 
       // Update last login
       await db.query(
         `UPDATE users SET last_login_at = NOW(), last_login_ip = $1 
          WHERE id = $2`,
-        [ipAddress, user.id]
+        [ipAddress, user.id],
       );
 
       return {
@@ -302,7 +302,7 @@ export class AuthService {
       // Get user
       const user = await db.one(
         "SELECT id, email, user_type FROM users WHERE id = $1",
-        [userId]
+        [userId],
       );
 
       // Generate new access token
@@ -314,7 +314,7 @@ export class AuthService {
           sessionId: decoded.sessionId,
         },
         jwtConfig.secret,
-        { expiresIn: jwtConfig.expiresIn }
+        { expiresIn: jwtConfig.expiresIn },
       );
 
       return {
@@ -363,10 +363,9 @@ export class AuthService {
   async changePassword(userId, currentPassword, newPassword) {
     try {
       // Get user
-      const user = await db.one(
-        "SELECT password FROM users WHERE id = $1",
-        [userId]
-      );
+      const user = await db.one("SELECT password FROM users WHERE id = $1", [
+        userId,
+      ]);
 
       // Verify current password
       const isValid = await comparePassword(currentPassword, user.password);
@@ -378,7 +377,7 @@ export class AuthService {
       const passwordValidation = this.validatePasswordStrength(newPassword);
       if (!passwordValidation.isValid) {
         throw new Error(
-          `Weak password. Requirements: ${passwordValidation.failedRequirements.join(", ")}`
+          `Weak password. Requirements: ${passwordValidation.failedRequirements.join(", ")}`,
         );
       }
 
@@ -418,14 +417,15 @@ export class AuthService {
         // Don't reveal if email exists (security)
         return {
           success: true,
-          message:
-            "If email exists, reset link sent. Please check your inbox.",
+          message: "If email exists, reset link sent. Please check your inbox.",
         };
       }
 
       // Generate reset OTP
-      const { otpId, expiresIn } =
-        await otpService.generatePasswordResetOTP(user.id, email);
+      const { otpId, expiresIn } = await otpService.generatePasswordResetOTP(
+        user.id,
+        email,
+      );
 
       return {
         success: true,
@@ -454,7 +454,7 @@ export class AuthService {
       const passwordValidation = this.validatePasswordStrength(newPassword);
       if (!passwordValidation.isValid) {
         throw new Error(
-          `Weak password. Requirements: ${passwordValidation.failedRequirements.join(", ")}`
+          `Weak password. Requirements: ${passwordValidation.failedRequirements.join(", ")}`,
         );
       }
 
@@ -487,7 +487,7 @@ export class AuthService {
     try {
       const user = await db.one(
         "SELECT id, email, phone FROM users WHERE id = $1",
-        [userId]
+        [userId],
       );
 
       if (method === "email") {
@@ -561,7 +561,7 @@ export class AuthService {
     try {
       const session = await db.oneOrNone(
         "SELECT id FROM user_sessions WHERE id = $1 AND user_id = $2",
-        [sessionId, userId]
+        [sessionId, userId],
       );
 
       if (!session) {

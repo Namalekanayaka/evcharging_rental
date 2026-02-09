@@ -137,7 +137,7 @@ class SecureTokenStorage {
 
       final payload = _decodeBase64(parts[1]);
       final json = payload;
-      
+
       final exp = json['exp'] as int?;
       if (exp == null) return true;
 
@@ -151,7 +151,7 @@ class SecureTokenStorage {
   /// Decode base64 JWT payload
   Map<String, dynamic> _decodeBase64(String str) {
     String output = str.replaceAll('-', '+').replaceAll('_', '/');
-    
+
     switch (output.length % 4) {
       case 0:
         break;

@@ -34,7 +34,7 @@ export const authMiddleware = async (req, res, next) => {
         const session = await db.oneOrNone(
           `SELECT id FROM user_sessions 
            WHERE session_id = $1 AND user_id = $2 AND is_active = true AND expires_at > NOW()`,
-          [decoded.sessionId, decoded.id]
+          [decoded.sessionId, decoded.id],
         );
 
         if (!session) {
@@ -49,7 +49,7 @@ export const authMiddleware = async (req, res, next) => {
     // Validate user still exists and is active
     const user = await db.oneOrNone(
       `SELECT id, account_status FROM users WHERE id = $1`,
-      [decoded.id]
+      [decoded.id],
     );
 
     if (!user) {
@@ -91,7 +91,7 @@ export const optionalAuth = async (req, res, next) => {
           const session = await db.oneOrNone(
             `SELECT id FROM user_sessions 
              WHERE session_id = $1 AND user_id = $2 AND is_active = true AND expires_at > NOW()`,
-            [decoded.sessionId, decoded.id]
+            [decoded.sessionId, decoded.id],
           );
 
           if (!session) {
@@ -122,10 +122,7 @@ export const requireOwnResource = (req, res, next) => {
 
   if (parseInt(userId) !== parseInt(authenticatedUserId)) {
     return next(
-      new ApiError(
-        403,
-        "You do not have permission to access this resource"
-      )
+      new ApiError(403, "You do not have permission to access this resource"),
     );
   }
 
@@ -142,7 +139,7 @@ export const require2FA = async (req, res, next) => {
 
     const user = await db.oneOrNone(
       `SELECT two_fa_enabled, two_fa_verified FROM users WHERE id = $1`,
-      [userId]
+      [userId],
     );
 
     if (!user) {
@@ -150,9 +147,7 @@ export const require2FA = async (req, res, next) => {
     }
 
     if (user.two_fa_enabled && !user.two_fa_verified) {
-      return next(
-        new ApiError(403, "Two-factor authentication required")
-      );
+      return next(new ApiError(403, "Two-factor authentication required"));
     }
 
     next();
@@ -171,7 +166,7 @@ export const requireEmailVerification = async (req, res, next) => {
 
     const user = await db.oneOrNone(
       `SELECT is_verified FROM users WHERE id = $1`,
-      [userId]
+      [userId],
     );
 
     if (!user) {
@@ -180,7 +175,10 @@ export const requireEmailVerification = async (req, res, next) => {
 
     if (!user.is_verified) {
       return next(
-        new ApiError(403, "Email verification required. Please check your inbox.")
+        new ApiError(
+          403,
+          "Email verification required. Please check your inbox.",
+        ),
       );
     }
 
@@ -200,7 +198,7 @@ export const requirePhoneVerification = async (req, res, next) => {
 
     const user = await db.oneOrNone(
       `SELECT phone_verified FROM users WHERE id = $1`,
-      [userId]
+      [userId],
     );
 
     if (!user) {
@@ -208,9 +206,7 @@ export const requirePhoneVerification = async (req, res, next) => {
     }
 
     if (!user.phone_verified) {
-      return next(
-        new ApiError(403, "Phone verification required")
-      );
+      return next(new ApiError(403, "Phone verification required"));
     }
 
     next();
@@ -229,7 +225,7 @@ export const updateSessionActivity = async (req, res, next) => {
       await db.query(
         `UPDATE user_sessions SET last_accessed_at = NOW() 
          WHERE session_id = $1`,
-        [req.user.sessionId]
+        [req.user.sessionId],
       );
     }
   } catch (error) {
@@ -240,4 +236,3 @@ export const updateSessionActivity = async (req, res, next) => {
 };
 
 export default authMiddleware;
-

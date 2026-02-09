@@ -20,11 +20,13 @@ export class OTPService {
       const recentOTPs = await db.query(
         `SELECT COUNT(*) as count FROM otp_codes 
          WHERE user_id = $1 AND created_at > NOW() - INTERVAL '1 hour'`,
-        [userId]
+        [userId],
       );
 
       if (recentOTPs[0].count >= 3) {
-        throw new Error("Too many OTP requests. Please try again after 1 hour.");
+        throw new Error(
+          "Too many OTP requests. Please try again after 1 hour.",
+        );
       }
 
       // Generate OTP
@@ -41,7 +43,7 @@ export class OTPService {
         `INSERT INTO otp_codes (user_id, code, type, expires_at, created_at)
          VALUES ($1, $2, 'email', $3, $4)
          RETURNING id, user_id, code, expires_at`,
-        [userId, otp, otpExpiry, createdAt]
+        [userId, otp, otpExpiry, createdAt],
       );
 
       // Send OTP via email
@@ -71,11 +73,13 @@ export class OTPService {
       const recentOTPs = await db.query(
         `SELECT COUNT(*) as count FROM otp_codes 
          WHERE user_id = $1 AND created_at > NOW() - INTERVAL '1 hour'`,
-        [userId]
+        [userId],
       );
 
       if (recentOTPs[0].count >= 3) {
-        throw new Error("Too many OTP requests. Please try again after 1 hour.");
+        throw new Error(
+          "Too many OTP requests. Please try again after 1 hour.",
+        );
       }
 
       // Generate OTP
@@ -92,7 +96,7 @@ export class OTPService {
         `INSERT INTO otp_codes (user_id, code, type, expires_at, created_at)
          VALUES ($1, $2, 'phone', $3, $4)
          RETURNING id, user_id, code, expires_at`,
-        [userId, otp, otpExpiry, createdAt]
+        [userId, otp, otpExpiry, createdAt],
       );
 
       // Send OTP via SMS (implement based on SMS provider)
@@ -122,7 +126,7 @@ export class OTPService {
         `SELECT * FROM otp_codes 
          WHERE user_id = $1 AND code = $2 AND type = $3 
          AND expires_at > NOW() AND is_used = false`,
-        [userId, otp, type]
+        [userId, otp, type],
       );
 
       if (!otpRecord) {
@@ -157,7 +161,7 @@ export class OTPService {
       await db.query(
         `UPDATE otp_codes SET is_used = true 
          WHERE user_id = $1 AND type = $2 AND is_used = false`,
-        [userId, type]
+        [userId, type],
       );
 
       if (type === "email") {
@@ -181,10 +185,7 @@ export class OTPService {
   async generatePasswordResetOTP(userId, email) {
     try {
       // Generate OTP
-      const otp = Math.random()
-        .toString()
-        .slice(2, 8)
-        .padStart(6, "0");
+      const otp = Math.random().toString().slice(2, 8).padStart(6, "0");
 
       const otpExpiry = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
@@ -192,7 +193,7 @@ export class OTPService {
         `INSERT INTO otp_codes (user_id, code, type, expires_at)
          VALUES ($1, $2, 'password_reset', $3)
          RETURNING id, expires_at`,
-        [userId, otp, otpExpiry]
+        [userId, otp, otpExpiry],
       );
 
       // Send OTP
@@ -216,7 +217,7 @@ export class OTPService {
   async cleanupExpiredOTPs() {
     try {
       const result = await db.query(
-        "DELETE FROM otp_codes WHERE expires_at < NOW()"
+        "DELETE FROM otp_codes WHERE expires_at < NOW()",
       );
 
       return {

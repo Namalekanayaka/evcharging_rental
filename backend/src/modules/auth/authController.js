@@ -30,7 +30,7 @@ export const register = asyncHandler(async (req, res, next) => {
 
     if (password.length < 8) {
       return next(
-        new ApiError(400, "Password must be at least 8 characters long")
+        new ApiError(400, "Password must be at least 8 characters long"),
       );
     }
 
@@ -147,8 +147,7 @@ export const login = asyncHandler(async (req, res, next) => {
 export const refreshToken = asyncHandler(async (req, res, next) => {
   try {
     const { userId } = req.user;
-    const refreshToken =
-      req.cookies.refreshToken || req.body.refreshToken;
+    const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
 
     if (!refreshToken) {
       return next(new ApiError(401, "Refresh token required"));
@@ -178,7 +177,11 @@ export const resendOTP = asyncHandler(async (req, res, next) => {
       return next(new ApiError(400, "User ID and contact are required"));
     }
 
-    const result = await authService.resendOTP(userId, contact, type || "email");
+    const result = await authService.resendOTP(
+      userId,
+      contact,
+      type || "email",
+    );
 
     res.status(200).json({
       success: true,
@@ -224,9 +227,7 @@ export const changePassword = asyncHandler(async (req, res, next) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
 
     if (!currentPassword || !newPassword || !confirmPassword) {
-      return next(
-        new ApiError(400, "All password fields are required")
-      );
+      return next(new ApiError(400, "All password fields are required"));
     }
 
     if (newPassword !== confirmPassword) {
@@ -236,7 +237,7 @@ export const changePassword = asyncHandler(async (req, res, next) => {
     const result = await authService.changePassword(
       userId,
       currentPassword,
-      newPassword
+      newPassword,
     );
 
     res.clearCookie("refreshToken");
@@ -287,8 +288,8 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
       return next(
         new ApiError(
           400,
-          "User ID, OTP, and password confirmation are required"
-        )
+          "User ID, OTP, and password confirmation are required",
+        ),
       );
     }
 

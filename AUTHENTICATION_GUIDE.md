@@ -11,6 +11,7 @@ This document provides a comprehensive guide to the complete authentication and 
 ### 1. Core Services
 
 #### Enhanced Auth Service (`authService.js`)
+
 - **Password Strength Validation**: Enforces 8+ characters with uppercase, lowercase, numbers, and special characters
 - **Email OTP Verification**: 10-minute expiration with rate limiting
 - **Phone OTP Verification**: SMS-based OTP (ready for integration)
@@ -21,6 +22,7 @@ This document provides a comprehensive guide to the complete authentication and 
 - **Account Lockout Protection**: 5 failed attempts lock account for 30 minutes
 
 #### Session Service (`sessionService.js`)
+
 - **Multi-Device Support**: Max 3 concurrent sessions per user
 - **Session Tracking**: Device info, IP address, last accessed time
 - **Failed Login Tracking**: IP-based tracking for brute force protection
@@ -28,6 +30,7 @@ This document provides a comprehensive guide to the complete authentication and 
 - **Session Validation**: Verify session on each request
 
 #### OTP Service (`otpService.js`)
+
 - **Dual Channel Support**: Email and SMS OTP delivery
 - **Rate Limiting**: Max 3 OTP requests per hour per user
 - **Expiration Management**: 10 minutes for standard, 15 for password reset
@@ -37,6 +40,7 @@ This document provides a comprehensive guide to the complete authentication and 
 ### 2. Enhanced Middleware
 
 #### Auth Middleware (`authMiddleware.js`)
+
 ```javascript
 // Features:
 - JWT token verification
@@ -50,6 +54,7 @@ This document provides a comprehensive guide to the complete authentication and 
 ```
 
 #### Rate Limiting Middleware (`rateLimitMiddleware.js`)
+
 ```javascript
 // Rate Limits:
 - Login: 5 attempts per 30 minutes per IP
@@ -64,6 +69,7 @@ This document provides a comprehensive guide to the complete authentication and 
 ### 3. Authentication Routes
 
 **Public Routes:**
+
 - `POST /api/auth/register` - New user registration
 - `POST /api/auth/verify-email-otp` - Verify email OTP
 - `POST /api/auth/verify-phone-otp` - Verify phone OTP
@@ -73,6 +79,7 @@ This document provides a comprehensive guide to the complete authentication and 
 - `POST /api/auth/reset-password` - Reset with OTP
 
 **Protected Routes:**
+
 - `POST /api/auth/refresh-token` - Get new access token
 - `POST /api/auth/logout` - Logout (single or all devices)
 - `POST /api/auth/change-password` - Change password
@@ -88,6 +95,7 @@ This document provides a comprehensive guide to the complete authentication and 
 ### 1. Secure Token Storage
 
 #### SecureTokenStorage Service
+
 ```dart
 // Stores in secure vault:
 - Access token (JWT)
@@ -104,6 +112,7 @@ This document provides a comprehensive guide to the complete authentication and 
 ```
 
 **Usage:**
+
 ```dart
 final storage = getIt<SecureTokenStorage>();
 await storage.saveAuthData(
@@ -118,31 +127,32 @@ await storage.saveAuthData(
 ### 2. Auth Repository
 
 #### Implementation
+
 ```dart
 class AuthRepository {
   // Registration flow
   Future<Map> register({...})
-  
+
   // OTP verification
   Future<UserEntity> verifyEmailOTP({...})
   Future<UserEntity> verifyPhoneOTP({...})
-  
+
   // Login with device info
   Future<Map> login({...})
-  
+
   // Token management
   Future<String> refreshAccessToken()
   Future<void> logout({allDevices})
-  
+
   // Password management
   Future<void> changePassword({...})
   Future<void> requestPasswordReset({...})
   Future<void> resetPassword({...})
-  
+
   // 2FA
   Future<void> send2FA({method})
   Future<void> verify2FA({code, method})
-  
+
   // Session management
   Future<List> getUserSessions()
   Future<void> terminateSession({sessionId})
@@ -152,10 +162,11 @@ class AuthRepository {
 ### 3. Enhanced Auth BLoC
 
 #### Events
+
 - `CheckAuthStatusEvent` - Check if already logged in
 - `RegisterEvent` - User registration
 - `VerifyEmailOTPEvent` - Verify email OTP
-- `VerifyPhoneOTPEvent` - Verify phone OTP  
+- `VerifyPhoneOTPEvent` - Verify phone OTP
 - `LoginEvent` - Secure login
 - `ResendOTPEvent` - Resend OTP
 - `RefreshTokenEvent` - Refresh access token
@@ -169,6 +180,7 @@ class AuthRepository {
 - `TerminateSessionEvent` - Kill session
 
 #### States
+
 - `AuthInitial` - Initial state
 - `AuthLoading` - Loading in progress
 - `AuthAuthenticated` - User logged in
@@ -189,6 +201,7 @@ class AuthRepository {
 ### 4. Login Flow UI
 
 **Login Page Features:**
+
 - Email validation (regex pattern)
 - Password strength indicator
 - Show/hide password toggle
@@ -199,6 +212,7 @@ class AuthRepository {
 - Device info collection
 
 **OTP Verification Page Features:**
+
 - 6-digit OTP input with auto-advance
 - Countdown timer (5 minutes)
 - Resend OTP button
@@ -213,6 +227,7 @@ class AuthRepository {
 ### Backend Security
 
 1. **Password Security**
+
    ```
    - Minimum 8 characters
    - Uppercase + lowercase + numbers + special characters
@@ -222,6 +237,7 @@ class AuthRepository {
    ```
 
 2. **Token Security**
+
    ```
    - JWT with HS256 algorithm
    - Access token: 1 hour expiration
@@ -231,6 +247,7 @@ class AuthRepository {
    ```
 
 3. **OTP Security**
+
    ```
    - 6-digit codes
    - 10-minute expiration
@@ -240,6 +257,7 @@ class AuthRepository {
    ```
 
 4. **Account Lockout**
+
    ```
    - 5 failed attempts triggers lock
    - 30-minute lockout duration
@@ -258,6 +276,7 @@ class AuthRepository {
 ### Flutter Security
 
 1. **Token Storage**
+
    ```
    - Use flutter_secure_storage
    - Encrypted at rest
@@ -268,6 +287,7 @@ class AuthRepository {
    ```
 
 2. **Network Security**
+
    ```
    - HTTPS only
    - Certificate pinning
@@ -276,6 +296,7 @@ class AuthRepository {
    ```
 
 3. **Data Protection**
+
    ```
    - Encrypt sensitive data
    - Clear clipboard after paste
@@ -296,6 +317,7 @@ class AuthRepository {
 ## Implementation Checklist
 
 ### Backend Setup
+
 - [ ] Install required packages (jsonwebtoken, bcryptjs, pg-promise)
 - [ ] Create database tables (users, otp_codes, user_sessions, login_attempts)
 - [ ] Set up environment variables (JWT_SECRET, JWT_REFRESH_SECRET, etc.)
@@ -308,6 +330,7 @@ class AuthRepository {
 - [ ] Setup error tracking (Sentry/New Relic)
 
 ### Flutter Setup
+
 - [ ] Add flutter_secure_storage dependency
 - [ ] Add device_info_plus for device detection
 - [ ] Add dio for HTTP client
@@ -322,6 +345,7 @@ class AuthRepository {
 - [ ] Test logout behavior
 
 ### API Client Enhancements
+
 - [ ] Add JWT interceptor
 - [ ] Implement token refresh retry logic
 - [ ] Add request signing (optional)
@@ -336,6 +360,7 @@ class AuthRepository {
 ### Backend Tests
 
 **Unit Tests:**
+
 ```javascript
 - Password validation and hashing
 - OTP generation and expiration
@@ -346,6 +371,7 @@ class AuthRepository {
 ```
 
 **Integration Tests:**
+
 ```javascript
 - Registration flow (with email)
 - Email OTP verification
@@ -359,6 +385,7 @@ class AuthRepository {
 ### Flutter Tests
 
 **Unit Tests:**
+
 ```dart
 - Token storage encryption/decryption
 - Auth state transitions
@@ -368,6 +395,7 @@ class AuthRepository {
 ```
 
 **Widget Tests:**
+
 ```dart
 - Login form submission
 - OTP input
@@ -377,6 +405,7 @@ class AuthRepository {
 ```
 
 **Integration Tests:**
+
 ```dart
 - Complete auth flow
 - Token refresh seamlessness
@@ -389,6 +418,7 @@ class AuthRepository {
 ## Monitoring & Maintenance
 
 ### Key Metrics
+
 - Failed login attempts per IP
 - Average login time
 - OTP delivery success rate
@@ -398,6 +428,7 @@ class AuthRepository {
 - Password reset requests per day
 
 ### Logging
+
 ```javascript
 // Log these events
 - Registration attempts
@@ -411,6 +442,7 @@ class AuthRepository {
 ```
 
 ### Regular Maintenance
+
 - [ ] Review and delete expired OTP codes (daily)
 - [ ] Monitor failed login patterns (daily)
 - [ ] Review active sessions (weekly)
@@ -426,6 +458,7 @@ class AuthRepository {
 ### Common Issues
 
 **OTP Not Received**
+
 - Check email configuration
 - Verify SMTP credentials
 - Check spam folder
@@ -433,18 +466,21 @@ class AuthRepository {
 - Check rate limiting thresholds
 
 **Token Expired Errors**
+
 - Token refresh logic should auto-trigger
 - Check refresh token validity
 - Verify token expiration times
 - Check session validity
 
 **Account Locked**
+
 - Wait 30 minutes for auto-unlock
 - Admin can manually unlock
 - Check IP if using VPN
 - Verify correct email/password
 
 **Session Validation Fails**
+
 - Clear local storage and re-login
 - Check server time sync
 - Verify session hasn't been terminated
@@ -511,4 +547,3 @@ class AuthRepository {
 - OWASP Auth Cheatsheet: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html
 - Flutter Security: https://flutter.dev/docs/security
 - Node.js Security: https://nodejs.org/en/docs/guides/security/
-
