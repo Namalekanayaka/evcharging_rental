@@ -7,8 +7,7 @@ class TransactionHistoryPage extends StatefulWidget {
   const TransactionHistoryPage({Key? key}) : super(key: key);
 
   @override
-  State<TransactionHistoryPage> createState() =>
-      _TransactionHistoryPageState();
+  State<TransactionHistoryPage> createState() => _TransactionHistoryPageState();
 }
 
 class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
@@ -30,9 +29,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   }
 
   IconData _getTransactionIcon(String type) {
-    return type == 'credit'
-        ? Icons.arrow_downward
-        : Icons.arrow_upward;
+    return type == 'credit' ? Icons.arrow_downward : Icons.arrow_upward;
   }
 
   String _getTransactionSign(String type) {
@@ -45,13 +42,9 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     if (_selectedFilter == 'all') {
       return transactions;
     } else if (_selectedFilter == 'credit') {
-      return transactions
-          .where((t) => t.type == 'credit')
-          .toList();
+      return transactions.where((t) => t.type == 'credit').toList();
     } else {
-      return transactions
-          .where((t) => t.type == 'debit')
-          .toList();
+      return transactions.where((t) => t.type == 'debit').toList();
     }
   }
 
@@ -210,14 +203,10 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
           vertical: 8,
         ),
         decoration: BoxDecoration(
-          color: isSelected
-              ? Colors.blue.shade700
-              : Colors.grey.shade100,
+          color: isSelected ? Colors.blue.shade700 : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected
-                ? Colors.blue.shade700
-                : Colors.grey.shade300,
+            color: isSelected ? Colors.blue.shade700 : Colors.grey.shade300,
             width: 1,
           ),
         ),

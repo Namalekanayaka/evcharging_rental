@@ -47,13 +47,13 @@ class _RecommendationsPageState extends State<RecommendationsPage> {
     if (_userLat == null || _userLng == null) return;
 
     context.read<SearchBloc>().add(
-      GetRecommendationEvent(
-        latitude: _userLat!,
-        longitude: _userLng!,
-        batteryPercentage: _batteryPercentage,
-        urgentCharging: _urgentCharging,
-      ),
-    );
+          GetRecommendationEvent(
+            latitude: _userLat!,
+            longitude: _userLng!,
+            batteryPercentage: _batteryPercentage,
+            urgentCharging: _urgentCharging,
+          ),
+        );
   }
 
   Future<void> _openNavigation(
@@ -106,8 +106,7 @@ class _RecommendationsPageState extends State<RecommendationsPage> {
                         subtitle: const Text('Need to charge quickly'),
                         value: _urgentCharging,
                         onChanged: (value) {
-                          setState(
-                              () => _urgentCharging = value ?? false);
+                          setState(() => _urgentCharging = value ?? false);
                           _loadRecommendation();
                         },
                       ),
@@ -138,8 +137,7 @@ class _RecommendationsPageState extends State<RecommendationsPage> {
                             const SizedBox(height: 16),
                             Text(
                               'No chargers available',
-                              style:
-                                  Theme.of(context).textTheme.titleMedium,
+                              style: Theme.of(context).textTheme.titleMedium,
                             ),
                           ],
                         ),
@@ -253,8 +251,7 @@ class _RecommendationCardState extends State<RecommendationCard> {
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        const Icon(Icons.star,
-                            size: 16, color: Colors.amber),
+                        const Icon(Icons.star, size: 16, color: Colors.amber),
                         const SizedBox(width: 4),
                         Text(
                           widget.charger.rating.toStringAsFixed(1),
@@ -278,8 +275,7 @@ class _RecommendationCardState extends State<RecommendationCard> {
                 _StatCard(
                   icon: Icons.location_on,
                   label: 'Distance',
-                  value:
-                      '${widget.charger.distanceKm.toStringAsFixed(1)} km',
+                  value: '${widget.charger.distanceKm.toStringAsFixed(1)} km',
                   color: Colors.blue,
                 ),
                 _StatCard(
@@ -291,8 +287,7 @@ class _RecommendationCardState extends State<RecommendationCard> {
                 _StatCard(
                   icon: Icons.power,
                   label: 'Price',
-                  value:
-                      '\$${widget.charger.pricePerKwh.toStringAsFixed(2)}',
+                  value: '\$${widget.charger.pricePerKwh.toStringAsFixed(2)}',
                   color: Colors.green,
                 ),
                 _StatCard(

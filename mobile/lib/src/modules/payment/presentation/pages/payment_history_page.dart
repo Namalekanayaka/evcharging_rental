@@ -7,8 +7,7 @@ class PaymentHistoryPage extends StatefulWidget {
   const PaymentHistoryPage({Key? key}) : super(key: key);
 
   @override
-  State<PaymentHistoryPage> createState() =>
-      _PaymentHistoryPageState();
+  State<PaymentHistoryPage> createState() => _PaymentHistoryPageState();
 }
 
 class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
@@ -200,10 +199,7 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        payment.createdAt
-                            .toLocal()
-                            .toString()
-                            .split('.')[0],
+                        payment.createdAt.toLocal().toString().split('.')[0],
                         style: TextStyle(
                           color: Colors.grey.shade600,
                           fontSize: 12,
@@ -334,7 +330,8 @@ class _PaymentHistoryPageState extends State<PaymentHistoryPage> {
 
                 // Details Grid
                 _buildDetailRow('Payment ID', payment.id.toString()),
-                _buildDetailRow('Amount', '\$${payment.amount.toStringAsFixed(2)}'),
+                _buildDetailRow(
+                    'Amount', '\$${payment.amount.toStringAsFixed(2)}'),
                 _buildDetailRow('Status', payment.status.toUpperCase()),
                 _buildDetailRow(
                   'Payment Method',

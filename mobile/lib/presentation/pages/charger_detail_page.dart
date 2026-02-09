@@ -7,7 +7,8 @@ import '../bloc/charger/charger_bloc.dart';
 class ChargerDetailPage extends StatefulWidget {
   final int chargerId;
 
-  const ChargerDetailPage({Key? key, required this.chargerId}) : super(key: key);
+  const ChargerDetailPage({Key? key, required this.chargerId})
+      : super(key: key);
 
   @override
   State<ChargerDetailPage> createState() => _ChargerDetailPageState();
@@ -22,8 +23,8 @@ class _ChargerDetailPageState extends State<ChargerDetailPage> {
     _photoController = PageController();
     // Load charger details
     context.read<ChargerBloc>().add(
-      GetChargerDetailEvent(chargerId: widget.chargerId),
-    );
+          GetChargerDetailEvent(chargerId: widget.chargerId),
+        );
   }
 
   @override
@@ -134,10 +135,13 @@ class _ChargerDetailPageState extends State<ChargerDetailPage> {
                               children: [
                                 Row(
                                   children: [
-                                    const Icon(Icons.star, size: 16, color: Colors.amber),
+                                    const Icon(Icons.star,
+                                        size: 16, color: Colors.amber),
                                     const SizedBox(width: 4),
                                     Text(
-                                      charger.averageRating?.toStringAsFixed(1) ?? 'N/A',
+                                      charger.averageRating
+                                              ?.toStringAsFixed(1) ??
+                                          'N/A',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 14,
@@ -270,7 +274,8 @@ class _ChargerDetailPageState extends State<ChargerDetailPage> {
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Charger Owner #${charger.ownerId}',
@@ -334,7 +339,8 @@ class _ChargerDetailPageState extends State<ChargerDetailPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     // Book charger
-                    Navigator.of(context).pushNamed('/booking', arguments: state.charger.id);
+                    Navigator.of(context)
+                        .pushNamed('/booking', arguments: state.charger.id);
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
