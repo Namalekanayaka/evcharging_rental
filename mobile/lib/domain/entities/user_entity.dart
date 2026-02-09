@@ -52,20 +52,26 @@ class UserEntity extends Equatable {
       id: json['id'] as int,
       email: json['email'] as String,
       phone: json['phone'] as String,
-      firstName: json['firstName'] as String? ?? json['first_name'] as String? ?? '',
-      lastName: json['lastName'] as String? ?? json['last_name'] as String? ?? '',
-      userType: json['userType'] as String? ?? json['user_type'] as String? ?? 'user',
-      profileImage: json['profileImage'] as String? ?? json['profile_image'] as String?,
+      firstName:
+          json['firstName'] as String? ?? json['first_name'] as String? ?? '',
+      lastName:
+          json['lastName'] as String? ?? json['last_name'] as String? ?? '',
+      userType:
+          json['userType'] as String? ?? json['user_type'] as String? ?? 'user',
+      profileImage:
+          json['profileImage'] as String? ?? json['profile_image'] as String?,
       bio: json['bio'] as String?,
-      averageRating: (json['averageRating'] as num?)?.toDouble() ?? 
-                     (json['average_rating'] as num?)?.toDouble(),
-      totalReviews: json['totalReviews'] as int? ?? json['total_reviews'] as int?,
-      isVerified: json['isVerified'] as bool? ?? json['is_verified'] as bool? ?? false,
-      createdAt: json['createdAt'] != null 
-        ? DateTime.parse(json['createdAt'] as String)
-        : json['created_at'] != null
-        ? DateTime.parse(json['created_at'] as String)
-        : DateTime.now(),
+      averageRating: (json['averageRating'] as num?)?.toDouble() ??
+          (json['average_rating'] as num?)?.toDouble(),
+      totalReviews:
+          json['totalReviews'] as int? ?? json['total_reviews'] as int?,
+      isVerified:
+          json['isVerified'] as bool? ?? json['is_verified'] as bool? ?? false,
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : json['created_at'] != null
+              ? DateTime.parse(json['created_at'] as String)
+              : DateTime.now(),
     );
   }
 

@@ -48,9 +48,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             lastName: authData['lastName'] ?? '',
             userType: authData['userType'] ?? 'user',
             isVerified: authData['isVerified'] as bool? ?? false,
-            createdAt: authData['createdAt'] != null 
-              ? DateTime.parse(authData['createdAt'] as String) 
-              : DateTime.now(),
+            createdAt: authData['createdAt'] != null
+                ? DateTime.parse(authData['createdAt'] as String)
+                : DateTime.now(),
           ),
         ));
       } else {

@@ -78,11 +78,11 @@ class _LoginPageState extends State<LoginPage> {
   void _handleLogin() {
     if (_validateForm()) {
       context.read<AuthBloc>().add(
-        LoginEvent(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        ),
-      );
+            LoginEvent(
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+            ),
+          );
     }
   }
 
@@ -244,7 +244,8 @@ class _LoginPageState extends State<LoginPage> {
                             onChanged: isLoading
                                 ? null
                                 : (value) {
-                                    setState(() => _rememberMe = value ?? false);
+                                    setState(
+                                        () => _rememberMe = value ?? false);
                                   },
                           ),
                           const Text('Remember me'),
@@ -255,7 +256,8 @@ class _LoginPageState extends State<LoginPage> {
                             ? null
                             : () {
                                 // Navigate to forgot password
-                                Navigator.of(context).pushNamed('/forgot-password');
+                                Navigator.of(context)
+                                    .pushNamed('/forgot-password');
                               },
                         child: const Text('Forgot password?'),
                       ),

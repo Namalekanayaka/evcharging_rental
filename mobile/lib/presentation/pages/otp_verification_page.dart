@@ -82,28 +82,28 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
   /// Handle OTP verification
   void _verifyOTP() {
     final otp = _getOTP();
-    
+
     if (widget.contactMethod == 'email') {
       context.read<AuthBloc>().add(
-        VerifyEmailOTPEvent(userId: widget.userId, otp: otp),
-      );
+            VerifyEmailOTPEvent(userId: widget.userId, otp: otp),
+          );
     } else {
       context.read<AuthBloc>().add(
-        VerifyPhoneOTPEvent(userId: widget.userId, otp: otp),
-      );
+            VerifyPhoneOTPEvent(userId: widget.userId, otp: otp),
+          );
     }
   }
 
   /// Handle resend OTP
   void _resendOTP() {
     context.read<AuthBloc>().add(
-      ResendOTPEvent(
-        userId: widget.userId,
-        contact: widget.maskedContact,
-        type: widget.contactMethod,
-      ),
-    );
-    
+          ResendOTPEvent(
+            userId: widget.userId,
+            contact: widget.maskedContact,
+            type: widget.contactMethod,
+          ),
+        );
+
     setState(() => _remainingSeconds = 300);
     _startTimer();
   }
@@ -209,10 +209,13 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: isExpired ? Colors.red[50] : Colors.orange[50],
+                            color:
+                                isExpired ? Colors.red[50] : Colors.orange[50],
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: isExpired ? Colors.red[200]! : Colors.orange[200]!,
+                              color: isExpired
+                                  ? Colors.red[200]!
+                                  : Colors.orange[200]!,
                             ),
                           ),
                           child: Text(
@@ -220,14 +223,13 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                                 ? 'OTP Expired'
                                 : 'Expires in ${_formatTime(_remainingSeconds)}',
                             style: TextStyle(
-                              color: isExpired ? Colors.red : Colors.orange[700],
+                              color:
+                                  isExpired ? Colors.red : Colors.orange[700],
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-
                         const SizedBox(height: 16),
-
                         if (isExpired)
                           ElevatedButton.icon(
                             onPressed: isLoading ? null : _resendOTP,
