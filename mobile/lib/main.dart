@@ -19,13 +19,12 @@ import 'presentation/pages/charger_detail_page.dart';
 import 'presentation/pages/booking_page.dart';
 import 'presentation/pages/wallet_page.dart';
 import 'injection_container.dart' as di;
-
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 // import 'firebase_options.dart'; // TODO: Generate firebase_options.dart if using FlutterFire CLI
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp(); // Disabled for dummy data mode
   await di.init();
   runApp(const MyApp());
 }
@@ -61,6 +60,7 @@ class MyApp extends StatelessWidget {
             case '/auth':
               return MaterialPageRoute(builder: (_) => const AuthPage());
             case '/chargers':
+            case '/home':
               return MaterialPageRoute(builder: (_) => const ChargerListingPage());
             case '/charger-detail':
               final chargerId = settings.arguments as int?;

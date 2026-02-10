@@ -1,4 +1,5 @@
 import '../../domain/entities/charger_entity.dart';
+import '../../core/constants/api_constants.dart';
 import '../datasource/api_client.dart';
 
 /// Charger Repository
@@ -20,6 +21,33 @@ class ChargerRepository {
     String? sortBy = 'DISTANCE',
     int page = 1,
   }) async {
+    // MOCK DATA Handling
+    if (useMockData) {
+      final mockChargers = List.generate(10, (index) => ChargerEntity(
+        id: index + 1,
+        ownerId: 1,
+        name: 'Mock Charger ${index + 1}',
+        description: 'This is a mock charger for testing purposes.',
+        type: 'LEVEL_2',
+        address: '123 Mock Street',
+        latitude: latitude ?? 37.7749 + (index * 0.01),
+        longitude: longitude ?? -122.4194 + (index * 0.01),
+        pricePerHour: 10.0 + index,
+        connectorTypes: ['J1772', 'CCS'],
+        maxWattage: 7.2,
+        averageRating: 4.5,
+        totalReviews: 10,
+        status: 'AVAILABLE',
+        createdAt: DateTime.now(),
+      ));
+
+      return {
+        'chargers': mockChargers,
+        'totalCount': 10,
+        'page': page,
+      };
+    }
+
     try {
       final params = <String, dynamic>{
         if (latitude != null) 'latitude': latitude,
@@ -71,6 +99,27 @@ class ChargerRepository {
 
   /// Get charger details
   Future<ChargerEntity> getChargerDetail(int chargerId) async {
+    // MOCK DATA Handling
+    if (useMockData) {
+      return ChargerEntity(
+        id: chargerId,
+        ownerId: 1,
+        name: 'Mock Charger $chargerId',
+        description: 'Details for mock charger $chargerId. This is a level 2 charger with high availability.',
+        type: 'LEVEL_2',
+        address: '123 Mock Street, Tech City',
+        latitude: 37.7749,
+        longitude: -122.4194,
+        pricePerHour: 15.0,
+        connectorTypes: ['J1772', 'CCS', 'CHAdeMO'],
+        maxWattage: 11.0,
+        averageRating: 4.8,
+        totalReviews: 25,
+        status: 'AVAILABLE',
+        createdAt: DateTime.now(),
+      );
+    }
+    
     try {
       final response = await _apiClient.get('/chargers/$chargerId');
       final data = response.data['data'];

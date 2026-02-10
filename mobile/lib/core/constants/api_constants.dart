@@ -14,3 +14,6 @@ const int pageSize = 20;
 const String userCacheKey = 'user_cache';
 const String tokenCacheKey = 'token_cache';
 const String chargersCacheKey = 'chargers_cache';
+
+// Mock Data
+const bool useMockData = true;

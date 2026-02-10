@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import '../../domain/entities/user_entity.dart';
 import '../datasource/api_client.dart';
+import '../../core/constants/api_constants.dart';
 import '../datasources/secure_token_storage.dart';
 
 /// Authentication Repository
@@ -107,11 +108,30 @@ class AuthRepository {
     }
   }
 
-  /// Enhanced login with token and session storage
   Future<Map<String, dynamic>> login({
     required String email,
     required String password,
   }) async {
+    // MOCK DATA Handling
+    if (useMockData) {
+      final deviceInfo = await _getDeviceInfo();
+      // Dummy user and tokens
+      final data = {
+        'tokens': {'accessToken': 'mock_access_token', 'refreshToken': 'mock_refresh_token'},
+        'session': {'sessionId': 'mock_session_id'},
+        'user': {'id': 123, 'email': email, 'firstName': 'Test', 'lastName': 'User'}
+      };
+      
+      await _tokenStorage.saveAuthData(
+        accessToken: data['tokens']['accessToken'],
+        refreshToken: data['tokens']['refreshToken'],
+        sessionId: data['session']['sessionId'],
+        userId: data['user']['id'].toString(),
+        deviceInfo: deviceInfo,
+      );
+      return data;
+    }
+
     try {
       final deviceInfo = await _getDeviceInfo();
 
