@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get_it/get_it.dart';
+import 'core/constants/api_constants.dart';
 import 'data/datasource/api_client.dart';
 import 'data/datasources/secure_token_storage.dart';
 import 'data/repositories/auth_repository.dart';
@@ -63,7 +64,7 @@ Future<void> init() async {
   getIt.registerSingleton<SearchRemoteDataSource>(
     SearchRemoteDataSourceImpl(
       dio: getIt<ApiClient>().dio,
-      baseUrl: 'http://localhost:5000/api',
+      baseUrl: apiBaseUrl,
     ),
   );
 
@@ -104,7 +105,7 @@ Future<void> init() async {
   getIt.registerSingleton<PaymentRemoteDataSource>(
     PaymentRemoteDataSourceImpl(
       dio: getIt<ApiClient>().dio,
-      baseUrl: 'http://localhost:5000/api',
+      baseUrl: apiBaseUrl,
     ),
   );
 

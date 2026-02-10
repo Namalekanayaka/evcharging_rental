@@ -70,10 +70,3 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-
-  fonts:
-    - family: GoogleSans
-      fonts:
-        - asset: assets/fonts/GoogleSans-Regular.ttf
-        - asset: assets/fonts/GoogleSans-Bold.ttf
-          weight: 700

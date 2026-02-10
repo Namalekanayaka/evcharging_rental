@@ -1,4 +1,5 @@
-const String apiBaseUrl = 'http://localhost:5000/api';
+// For Android Emulator use 10.0.2.2. For physical device use your computer's LAN IP (e.g. 192.168.1.x)
+const String apiBaseUrl = 'http://10.0.2.2:5000/api';
 const String mapApiKey = 'YOUR_GOOGLE_MAPS_API_KEY';
 const String defaultLanguage = 'en';
 
